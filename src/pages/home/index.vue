@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Count: {{ counterStore.count }}</p>
+    <p>Count: {{ count }}</p>
     <p>Double Count: {{ doubleCount }}</p>
     <button @click="increment">Increment</button>
     <button @click="decrement">Decrement</button>
@@ -10,10 +10,11 @@
 
 <script setup lang="ts">
 import { useCounterStore } from '@/pinia/counter';
-import { ref } from 'vue'
+const count = ref(18)
 const counterStore = useCounterStore();
-
-const count = ref(counterStore.count);
+setTimeout(() => {
+  count.value = 30
+}, 1000);
 const doubleCount = counterStore.doubleCount;
 const increment = counterStore.increment;
 const decrement = counterStore.decrement;
