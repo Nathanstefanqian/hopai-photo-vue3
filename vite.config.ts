@@ -21,7 +21,7 @@ export default defineConfig({
           'uni-app',
           'pinia',
       ],
-      dts: '/auto-imports.d.ts',
+      dts: 'auto-imports.d.ts',
   }),
   Components({
       // dirs 指定组件所在位置，默认为 src/components

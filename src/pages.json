@@ -3,8 +3,18 @@
     {
       "path": "pages/home/index",
       "style": {
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "首页",
+        "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "components/home/Card"
+    },
+    {
+      "path": "components/home/Header"
+    },
+    {
+      "path": "components/home/Tab"
     },
     {
       "path": "pages/order/index",
@@ -18,7 +28,27 @@
         "navigationBarTitleText": "我的"
       }
     }
+
   ],
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#ba2636",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "static/home.png",
+        "selectedIconPath": "static/home-a.png"
+      },
+      {
+        "pagePath": "pages/order/index",
+        "text": "订单",
+        "iconPath": "static/order.png",
+        "selectedIconPath": "static/order-a.png"
+      }]
+  },
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -28,7 +58,10 @@
   "easycom": {
     "autoscan": true,
     "custom": {
-            "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+            "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+            "^u--(.*)": "uview-plus/components/u-$1/u-$1.vue",
+            "^up-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+            "^u-([^-].*)": "uview-plus/components/u-$1/u-$1.vue"
     }
   }
 }

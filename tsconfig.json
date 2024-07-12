@@ -10,7 +10,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["vite/client"]
+    "types": ["vite/client", "uview-plus/types"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "config/**/*", "./components.d.ts","./auto-imports.d.ts"],
   "exclude": ["node_modules", "dist", "dist-beta", "dist-production"]
