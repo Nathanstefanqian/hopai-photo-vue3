@@ -4,18 +4,14 @@
       <Header />
     </div>
     <div class="home-main">
-      <div class="home-main-tab">
-        <Tab />
-      </div>
-      <div class="home-main-container" >
-        <Card v-for="item,index in 4" :key="index" />
-      </div>
+      <Tab />
+      <Container />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Card from '@/components/home/Card.vue'
+import Container from '@/components/home/Container.vue'
 import Header from '@/components/home/Header.vue'
 import Tab from '@/components/home/Tab.vue'
 </script>

@@ -1,6 +1,13 @@
 {
   "pages": [
     {
+      "path": "pages/auth/index",
+      "style": {
+        "navigationBarTitleText": "订单",
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/home/index",
       "style": {
         "navigationBarTitleText": "首页",
@@ -8,7 +15,7 @@
       }
     },
     {
-      "path": "components/home/Card"
+      "path": "components/home/Container"
     },
     {
       "path": "components/home/Header"
@@ -17,10 +24,7 @@
       "path": "components/home/Tab"
     },
     {
-      "path": "pages/order/index",
-      "style": {
-        "navigationBarTitleText": "订单"
-      }
+      "path": "pages/order/index"
     },
     {
       "path": "pages/my/index",
@@ -37,17 +41,18 @@
     "borderStyle": "black",
     "list": [
       {
-        "pagePath": "pages/home/index",
-        "text": "首页",
-        "iconPath": "static/home.png",
-        "selectedIconPath": "static/home-a.png"
-      },
-      {
         "pagePath": "pages/order/index",
         "text": "订单",
         "iconPath": "static/order.png",
         "selectedIconPath": "static/order-a.png"
-      }]
+      },
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "static/home.png",
+        "selectedIconPath": "static/home-a.png"
+      }
+]
   },
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

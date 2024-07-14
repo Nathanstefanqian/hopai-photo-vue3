@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import mpAdapter from "axios-miniprogram-adapter";
 
-axios.defaults.adapter = mpAdapter;
+axios.defaults.adapter = mpAdapter as any
 
 import { netConfig } from '@/config/net.config';
 
@@ -24,29 +24,21 @@ const instance = axios.create({
   },
 });
 
-// request interceptor
+// 请求头的添加
 instance.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
-    console.log('Request Config:', config);  // 添加日志
-    // do something before request is sent
+  (config: any) => {
+    const token = '123'
+    config.headers.Authorization = `Bearer ${token}`
     return config;
   },
   (error) => {
-    console.error('Request Error:', error);  // 添加日志
-    // do something with request error
     return Promise.reject(error);
   }
 );
 
-// response interceptor
 instance.interceptors.response.use(
-  /**
-   * If you want to get http information such as headers or status
-   * Please return  response => response
-   */
   (response: AxiosResponse) => {
     const res = response.data;
-    console.log("Response", res)
     // 请求出错处理
     // -1 超时、token过期或者没有获得授权
     // if (res.status === -1 && tokenLose) {

@@ -13,6 +13,7 @@ export const useCounterStore = defineStore('counter', {
     },
     decrement() {
       this.count--;
+      this.increment()
     },
     reset() {
       this.count = 0;

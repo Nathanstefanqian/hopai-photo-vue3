@@ -1,6 +1,6 @@
 export const netConfig = {
   // axios 基础url地址
-  baseURL: 'https://mp.api.hopai.cn/admin-api',
+  baseURL: 'https://mp.api.hopai.cn/app-api',
   // 为开发服务器配置 CORS。默认启用并允许任何源，传递一个 选项对象 来调整行为或设为 false 表示禁用
   cors: true,
   // 根据后端定义配置
