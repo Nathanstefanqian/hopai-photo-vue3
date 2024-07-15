@@ -1,10 +1,15 @@
 {
   "pages": [
     {
-      "path": "pages/my/index",
+      "path": "components/my/edit/Order",
       "style": {
-        "navigationBarTitleText": "我的",
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "接单信息"
+      }
+    },
+    {
+      "path": "components/my/edit/Device",
+      "style": {
+        "navigationBarTitleText": "设备信息"
       }
     },
     {
@@ -12,6 +17,19 @@
       "style": {
         "navigationBarTitleText": "首页",
         "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/my/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/my/edit/Basic",
+      "style": {
+        "navigationBarTitleText": "基本信息"
       }
     },
     {
@@ -29,6 +47,16 @@
     },
     {
       "path": "components/home/Tab"
+    },
+    {
+      "path": "components/my/edit/Photo"
+    },
+
+    {
+      "path": "components/my/edit/Money",
+      "style": {
+        "navigationBarTitleText": "佣金信息"
+      }
     },
     {
       "path": "pages/auth/index"

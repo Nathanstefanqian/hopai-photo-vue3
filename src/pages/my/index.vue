@@ -3,7 +3,7 @@
     <div class="redball"></div>
     <div class="my-main">
       <div class="my-main-header">
-        <image src="@/static/my/avatar.jpg" class="header-image"></image>
+        <image src="@/static/my/avatar.jpg" class="header-image" @click="previewAvatar"></image>
         <div class="header-userinfo">
           <div class="name">钱卢骏老师</div>
           <div class="desc">上海大学上海电影学院电子信息博士</div>
@@ -26,6 +26,7 @@
           <Album />
         </div>
       </div>
+      <div class="my-main-logout">退出登录</div>
     </div>
   </div>
 </template>
@@ -33,6 +34,12 @@
 <script setup lang="ts">
 import Tab from '@/components/my/Tab.vue'
 import Album from '@/components/my/Album.vue'
+const previewAvatar = () => {
+  uni.previewImage({
+    urls: ['/static/my/avatar.jpg'],
+    current: '/static/my/avatar.jpg'
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -67,6 +74,7 @@ import Album from '@/components/my/Album.vue'
     &-header {
       display: flex;
       margin-bottom: 60rpx;
+      
       .header-image {
         width: 140rpx;
         height: 140rpx;
@@ -104,6 +112,7 @@ import Album from '@/components/my/Album.vue'
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: 24rpx;
 
         .header-title {
           font-size: 36rpx;
@@ -117,6 +126,14 @@ import Album from '@/components/my/Album.vue'
           border: 0.66rpx solid #ba2636;
         }
       }
+    }
+
+    &-logout {
+      margin-top: 80rpx;
+      display: flex;
+      font-weight: 200;
+      color: rgba(0, 0, 0, 0.55);
+      justify-content: center;
     }
   }
 }

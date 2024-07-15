@@ -8,8 +8,13 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Album: typeof import('./src/components/my/Album.vue')['default']
+    Basic: typeof import('./src/components/my/edit/Basic.vue')['default']
     Container: typeof import('./src/components/home/Container.vue')['default']
+    Device: typeof import('./src/components/my/edit/Device.vue')['default']
     Header: typeof import('./src/components/home/Header.vue')['default']
+    Money: typeof import('./src/components/my/edit/Money.vue')['default']
+    Order: typeof import('./src/components/my/edit/Order.vue')['default']
+    Photo: typeof import('./src/components/my/edit/Photo.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Tab: typeof import('./src/components/home/Tab.vue')['default']
