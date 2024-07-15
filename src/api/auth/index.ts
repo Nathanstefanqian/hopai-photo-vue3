@@ -20,3 +20,8 @@ export const Login = async (params: LoginVO) => {
 export const logOut = async () => {
   return await request.post('/member/auth/logout')
 }
+
+// 刷新令牌
+export const refreshToken = async (token: any) => {
+  return await request.post('/member/auth/refresh-token')
+}

@@ -18,7 +18,7 @@ import Tab from '@/components/home/Tab.vue'
 
 <style lang="scss" scoped>
 .home {
-  background-image: url('@/assets/home/home-bg.svg');
+  background-image: url('@/static/home/home-bg.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

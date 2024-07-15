@@ -48,7 +48,7 @@
       width: 96rpx;
       height: 96rpx;
       background-color: rgba(255,255,255,0.85);
-      background-image: url('@/assets/home/home-scan.svg');
+      background-image: url('@/static/home/home-scan.svg');
       background-repeat: no-repeat;
       background-size: 48rpx;
       background-position: center;

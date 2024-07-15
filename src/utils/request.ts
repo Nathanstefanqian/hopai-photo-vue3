@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import mpAdapter from "axios-miniprogram-adapter";
-
-axios.defaults.adapter = mpAdapter as any
-
 import { netConfig } from '@/config/net.config';
+import { useUserStore } from '@/pinia/user';
+
+axios.defaults.adapter = mpAdapter as any;
 
 interface NetConfig {
   baseURL: string;
@@ -26,9 +26,22 @@ const instance = axios.create({
 
 // 请求头的添加
 instance.interceptors.request.use(
-  (config: any) => {
-    const token = '123'
-    config.headers.Authorization = `Bearer ${token}`
+  async (config: any) => {
+    const userStore = useUserStore();
+    const token = userStore.token;
+
+    // 检查token是否过期，如果过期则刷新token
+    if (!token) {
+      return config;
+    }
+
+    const isTokenExpired = checkTokenExpired(userStore.userInfo?.expiresTime);
+
+    if (isTokenExpired) {
+      await userStore.refreshToken(); // 刷新token
+    }
+
+    config.headers.Authorization = `Bearer ${userStore.token}`;
     return config;
   },
   (error) => {
@@ -39,24 +52,18 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
     const res = response.data;
-    // 请求出错处理
-    // -1 超时、token过期或者没有获得授权
-    // if (res.status === -1 && tokenLose) {
-    //   tokenLose = false;
-    //   uni.showToast({
-    //     title: '服务器异常',
-    //     duration: 2000
-    //   });
-    //   return Promise.reject(res);
-    // }
-    // if (successCode.indexOf(res.status) !== -1) {
-    //   return Promise.reject(res);
-    // }
     return res;
   },
   (error) => {
     return Promise.reject(error);
   }
 );
+
+// 检查token是否过期
+function checkTokenExpired(expiresTime: number | undefined) {
+  if (!expiresTime) return true; // 如果没有过期时间，则视为过期
+  const currentTimestamp = Math.floor(Date.now() / 1000); // 当前时间戳（秒）
+  return expiresTime < currentTimestamp;
+}
 
 export default instance;

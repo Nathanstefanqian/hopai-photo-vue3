@@ -53,7 +53,21 @@ export const useUserStore = defineStore('user', {
       }
     },
     async logout() {
+      await AuthApi.logOut(); // 调用登出接口
       this.clearUser();
+    },
+    async refreshToken() {
+      try {
+        const res: any = await AuthApi.refreshToken(this.userInfo?.refreshToken);
+        if (res.code === 0) {
+          const { accessToken } = res.data;
+          this.setToken(accessToken);
+        } else {
+          throw new Error(res.msg || '刷新token失败');
+        }
+      } catch (error) {
+        console.error('刷新token失败', error);
+      }
     },
   },
 });
