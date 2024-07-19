@@ -3,8 +3,8 @@
     <div class="home-header-title">拍摄任务</div>
     <div class="home-header-other">
       <div class="desc">
-        <span>HI，钱老师，本周您 6 次拍摄任务</span>
-        <span>其中待确认 1 个</span>
+        <span class="desc-font">HI，钱老师，本周您 6 次拍摄任务</span>
+        <span class="desc-font">其中待确认 1 个</span>
       </div>
       <div class="scan">
       </div>
@@ -39,8 +39,11 @@
     .desc {
       display: flex;
       flex-direction: column;
-      font-size: 28rpx;
       color: #F8F6E7;
+
+      &-font {
+        font-size: 28rpx;
+      }
     }
 
     .scan {

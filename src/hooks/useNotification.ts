@@ -25,7 +25,7 @@ export function useNotification() {
     });
   };
 
-  const showModal = (options: ModalOptions) => {
+  const modal = (options: ModalOptions) => {
     isModalVisible.value = true;
     return new Promise<void>((resolve, reject) => {
       uni.showModal({
@@ -34,17 +34,18 @@ export function useNotification() {
         showCancel: options.showCancel ?? true,
         cancelText: options.cancelText || '取消',
         confirmText: options.confirmText || '确定',
+        confirmColor: '#ba2636',
         success: (res) => {
           isModalVisible.value = false;
           if (res.confirm) {
             resolve();
           } else if (res.cancel) {
-            reject();
+            reject(false);
           }
         }
       });
     });
   };
 
-  return { message, showModal, isModalVisible };
+  return { message, modal, isModalVisible };
 }

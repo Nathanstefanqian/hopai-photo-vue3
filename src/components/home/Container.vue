@@ -105,6 +105,7 @@ const handleTest = async () => {
       border-radius: 8rpx;
       background: rgba(249, 233, 132, 0.90);
       font-size: 24rpx;
+      font-weight: 200;
     }
   }
 
@@ -114,10 +115,14 @@ const handleTest = async () => {
     &-item {
       display: flex;
       color: rgba(40, 40, 40, 0.50);
-      font-size: 24rpx;
+      font-size: 24rpx !important;
       &-title {
         width: 120rpx;
         margin-bottom: 8rpx;
+        font-size: 24rpx !important;
+      }
+      &-content {
+        font-size: 24rpx !important;
       }
     }
   }
@@ -126,11 +131,11 @@ const handleTest = async () => {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    font-size: 28rpx;
 
     &-text {
       color: rgba(40, 40, 40, 0.50);
       margin-right: 32rpx;
+      font-size: 24rpx;
     }
 
     &-btn {
@@ -138,6 +143,8 @@ const handleTest = async () => {
       border-radius: 12rpx;
       border: 0.66rpx solid #BA2636;
       padding: 10rpx 24rpx;
+      font-size: 28rpx;
+
     }
   }
 }

@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -12,6 +14,6 @@
     },
     "types": ["vite/client", "uview-plus/types"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "config/**/*", "./components.d.ts","./auto-imports.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "config/**/*", "./components.d.ts","./auto-imports.d.ts", "src/utils/bundle.ts"],
   "exclude": ["node_modules", "dist", "dist-beta", "dist-production"]
 }

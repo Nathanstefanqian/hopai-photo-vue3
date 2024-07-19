@@ -1,12 +1,12 @@
 <template>
-  <div class="my w-100vw h-100vh relative">
+  <div class="my w-100vw  relative">
     <div class="redball"></div>
     <div class="my-main">
       <div class="my-main-header">
-        <image src="@/static/my/avatar.jpg" class="header-image" @click="previewAvatar"></image>
-        <div class="header-userinfo">
-          <div class="name">钱卢骏老师</div>
-          <div class="desc">上海大学上海电影学院电子信息博士</div>
+        <image :src="user?.avatar || '/static/my/avatar.jpg'" class="header-image" @click="previewAvatar" mode="aspectFill"></image>
+        <div class="header-userinfo" @click="login">
+          <div class="name">{{ user?.nickname || '未登录' }}</div>
+          <div class="desc">{{ user?.appPhotographerInfoBaseVO?.introduction || '登录体验更多功能' }}</div>
         </div>
       </div>
       <div class="my-main-basic">
@@ -20,13 +20,13 @@
       <div class="my-main-album">
         <div class="my-main-album-header">
           <div class="header-title">我的代表作</div>
-          <div class="header-create">+ 创建</div>
+          <div class="header-create" @click="handleCreate">+ 创建</div>
         </div>
         <div class="my-main-album-main">
           <Album />
         </div>
       </div>
-      <div class="my-main-logout">退出登录</div>
+      <div class="my-main-logout" @click="logout">{{ isLoggedIn ? '退出登录' : '立即登录' }} </div>
     </div>
   </div>
 </template>
@@ -34,12 +34,43 @@
 <script setup lang="ts">
 import Tab from '@/components/my/Tab.vue'
 import Album from '@/components/my/Album.vue'
+import { getUserInfo } from '@/api/my/index'
+import { useUserStore } from '@/pinia/user'
+import { useNotification } from '@/hooks/useNotification'
+const user = ref<any>({})
+const { logout, isLoggedIn } = useUserStore()
+const { message, modal } = useNotification()
+
+
+
+const login = () => {
+  uni.navigateTo({ url: '/pages/auth/index'})
+}
+
 const previewAvatar = () => {
+  const urls = ref<any>([])
+  urls.value.push(user.value.avatar)
   uni.previewImage({
-    urls: ['/static/my/avatar.jpg'],
+    urls: urls.value,
     current: '/static/my/avatar.jpg'
   });
-};
+}
+
+const handleCreate = () => {
+  uni.navigateTo({
+    url: '/components/my/CreateAlbum'
+  })
+}
+
+onMounted(async () => {
+    if(!isLoggedIn) {
+      modal({ title: '您还没登录哦!', content: '登录即可使用小程序功能' }).then(() => {
+        uni.navigateTo({ url: '/pages/auth/index'})
+      }).catch(() => message({ title: '取消了就没法玩咯' }))
+    }
+    const res = await getUserInfo()
+    user.value = res.data
+})
 </script>
 
 <style lang="scss" scoped>
@@ -48,7 +79,7 @@ const previewAvatar = () => {
 .my {
   display: flex;
   background-color: #f6f6f6;
-
+  height: 1500rpx;
   .redball {
     position: absolute;
     z-index: 0;
@@ -60,7 +91,7 @@ const previewAvatar = () => {
     opacity: 0.2;
     filter: blur(70rpx);
     transform: scale(1); /* 初始大小为1 */
-    animation: breathe 2.5s ease-in-out infinite alternate; /* 使用呼吸效果的动画 */
+    animation: breathe-out 5s ease-in-out infinite alternate; /* 使用呼吸效果的动画 */
   }
 
   &-main {
@@ -129,7 +160,7 @@ const previewAvatar = () => {
     }
 
     &-logout {
-      margin-top: 80rpx;
+      padding-top: 80rpx;
       display: flex;
       font-weight: 200;
       color: rgba(0, 0, 0, 0.55);

@@ -2,7 +2,8 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import mpAdapter from "axios-miniprogram-adapter";
 import { netConfig } from '@/config/net.config';
 import { useUserStore } from '@/pinia/user';
-
+import { useNotification } from '@/hooks/useNotification';
+const { message } = useNotification()
 axios.defaults.adapter = mpAdapter as any;
 
 interface NetConfig {
@@ -29,7 +30,6 @@ instance.interceptors.request.use(
   async (config: any) => {
     const userStore = useUserStore();
     const token = userStore.token;
-
     // 检查token是否过期，如果过期则刷新token
     if (!token) {
       return config;
@@ -40,8 +40,7 @@ instance.interceptors.request.use(
     if (isTokenExpired) {
       await userStore.refreshToken(); // 刷新token
     }
-
-    config.headers.Authorization = `Bearer ${userStore.token}`;
+    config.headers.Authorization = `Bearer ${userStore.token}`
     return config;
   },
   (error) => {
@@ -52,9 +51,14 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
     const res = response.data;
+    // if(res.code != 0) {
+    //   message({ 'title': res.msg })
+    // }
     return res;
   },
   (error) => {
+    console.log('错误', error)
+    message({ 'title': '网络错误' })
     return Promise.reject(error);
   }
 );

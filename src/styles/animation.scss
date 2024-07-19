@@ -1,11 +1,21 @@
 @keyframes breathe {
   0% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes breathe-out {
+  0% {
     transform: scale(0.8);
   }
   100% {
     transform: scale(1.5);
   }
 }
+
 
 @keyframes shake {
   0% { transform: translateX(0); }

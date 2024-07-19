@@ -1,10 +1,25 @@
 {
   "pages": [
     {
+      "path": "pages/my/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "components/my/edit/Order",
       "style": {
         "navigationBarTitleText": "接单信息"
       }
+    },
+    {
+      "path": "components/my/edit/Basic",
+      "style": {
+        "navigationBarTitleText": "基本信息"
+      }
+    },
+    {
+      "path": "components/my/edit/Calendar"
     },
     {
       "path": "components/my/edit/Device",
@@ -12,24 +27,30 @@
         "navigationBarTitleText": "设备信息"
       }
     },
+
+    {
+      "path": "pages/auth/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
     {
       "path": "pages/home/index",
       "style": {
-        "navigationBarTitleText": "首页",
         "navigationStyle": "custom"
       }
     },
     {
-      "path": "pages/my/index",
+      "path": "components/my/CreateAlbum",
       "style": {
-        "navigationBarTitleText": "我的",
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "编辑相册"
       }
     },
+
     {
-      "path": "components/my/edit/Basic",
+      "path": "components/my/edit/Money",
       "style": {
-        "navigationBarTitleText": "基本信息"
+        "navigationBarTitleText": "佣金信息"
       }
     },
     {
@@ -51,15 +72,8 @@
     {
       "path": "components/my/edit/Photo"
     },
-
     {
-      "path": "components/my/edit/Money",
-      "style": {
-        "navigationBarTitleText": "佣金信息"
-      }
-    },
-    {
-      "path": "pages/auth/index"
+      "path": "components/my/edit/AreaPicker"
     }
   ],
   "tabBar": {

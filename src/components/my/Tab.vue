@@ -14,6 +14,11 @@
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/pinia/user'
+import { useNotification } from '@/hooks/useNotification'
+const { isLoggedIn } = useUserStore()
+const { message } = useNotification()
+
 const tabList = ref([
   {
     name: '基本信息',
@@ -41,6 +46,10 @@ const tabList = ref([
   },
 ])
 const handleNavigate = (url: string) => {
+  if(!isLoggedIn) {
+    message({title: '您还未登录哦'})
+    return
+  } 
   uni.navigateTo({
     url
   })

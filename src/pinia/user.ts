@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
+import { useNotification } from '@/hooks/useNotification';
 import * as AuthApi from '@/api/auth';
-
+import { LoginVO } from '@/api/auth/types';
+const { message, modal } = useNotification()
 interface UserInfo {
   userId: string;
   accessToken: string;
@@ -38,7 +40,7 @@ export const useUserStore = defineStore('user', {
       uni.removeStorageSync('token');
       uni.removeStorageSync('userInfo');
     },
-    async login(params: AuthApi.LoginVO) {
+    async login(params: LoginVO) {
       try {
         const res: any = await AuthApi.Login(params);
         if (res.code === 0) {
@@ -53,8 +55,13 @@ export const useUserStore = defineStore('user', {
       }
     },
     async logout() {
-      await AuthApi.logOut(); // 调用登出接口
-      this.clearUser();
+      modal({ title: '确认退出吗', content: '退出后要重新登录噢'}).then(async () => {
+        await AuthApi.logOut(); // 调用登出接口
+        this.clearUser();
+        message({"title": "退出成功", "icon": "success"})
+        uni.reLaunch({ url: "/pages/my/index" })
+      }).catch(() => message({ "title": "取消退出登录" }))
+
     },
     async refreshToken() {
       try {

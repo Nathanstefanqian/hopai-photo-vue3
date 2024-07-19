@@ -29,7 +29,7 @@ import { useUserStore } from '@/pinia/user'
 const userStore = useUserStore()
 const { message } = useNotification()
 const proxy = ref(false)
-const show = ref(true)
+const show = ref(false)
 const shake = ref(false)
 const loginCode = ref('')
 const handleAuthorize = () => {
@@ -138,11 +138,17 @@ onMounted(async () => {
     &-check {
       display: flex;
       margin-top: 192rpx;
+      margin-bottom: 80rpx;
       font-size: 28rpx;
       color: rgba(40, 40, 40, 0.50);
 
       .blue {
+        font-size: 28rpx;
         color: #264FBA !important;
+      }
+
+      .text {
+        font-size: 28rpx;
       }
     }
   }

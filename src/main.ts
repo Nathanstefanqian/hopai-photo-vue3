@@ -6,6 +6,7 @@ import './styles/global.scss'
 import uviewPlus from 'uview-plus'
 export function createApp() {
   const app = createSSRApp(App);
+  app.config.globalProperties.$imageUrl = 'https://upload.codegod.site/';
   app.use(pinia)
   app.use(uviewPlus)
   return {

@@ -1,22 +1,56 @@
 <template>
- <scroll-view class="my-main-basic-album-scrollview" scroll-x="true">
-  <div class="my-main-basic-album">
-    <div class="album" v-for="item,index in 4" :key="index" scroll-y="true">
-      <image class="album-image" src="/static/my/gf5.jpg" mode="aspectFill" />
-      <div class="album-desc">
-        <div class="title">居家写真</div>
-        <div class="op">
-          <span class="number">32</span>
-          <span class="edit">编辑</span>
+  <up-skeleton :rows="3" :loading="loading">
+    <scroll-view class="my-main-basic-album-scrollview" scroll-x="true">
+      <div class="my-main-basic-album">
+        <div class="album" v-for="item,index in album" :key="index" scroll-y="true" v-if="album.length" @click="editAlbum(item.id)">
+          <image class="album-image" :src="item.picUrl || '/static/my/gf5.jpg'" mode="aspectFill" />
+          <div class="album-desc">
+            <div class="title">{{ item.title }}</div>
+            <div class="op">
+              <span class="number">32</span>
+              <span class="edit">编辑</span>
+            </div>
+          </div>
+        </div>
+        <div class="album-empty" v-else>
+          <image src="/static/my/empty.svg" />
+          <span class="title">什么也没有</span>
         </div>
       </div>
-    </div>
-  </div>
- </scroll-view>
+    </scroll-view>
+  </up-skeleton>
+
 </template>
 
 <script setup lang="ts">
+import { getAlbumPage, getPhoto } from '@/api/my';
+import { useUserStore } from '@/pinia/user'
+const album = ref<any>([])
+const { getUserInfo } = useUserStore()
+const userId = getUserInfo?.userId
+const loading = ref(false)
 
+const editAlbum = (id: any) => {
+  uni.navigateTo({
+    url: `/components/my/CreateAlbum?id=${id}`
+  })
+}
+
+const getData = async () => {
+  loading.value = true
+  try {
+    album.value= (await getAlbumPage({ pageNo:1 , pageSize: 50, userId })).data?.list || []
+    await Promise.all(album.value.map(async item => {
+      item.picUrl = (await getPhoto(item.coverPhotoId)).data.url || ''
+    }))
+  } finally {
+    loading.value = false
+  }
+
+}
+onMounted(async () => {
+  await getData()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -64,6 +98,20 @@
         font-size: 24rpx;
         color: #ba2636;
       }
+    }
+  }
+
+  .album-empty {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40rpx;
+
+    .title {
+      color: rgba(0,0,0,0.3);
+      font-size: 28rpx;
     }
   }
 }
