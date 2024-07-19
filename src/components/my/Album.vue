@@ -32,7 +32,7 @@ const loading = ref(false)
 
 const editAlbum = (id: any) => {
   uni.navigateTo({
-    url: `/components/my/CreateAlbum?id=${id}`
+    url: `/components/my/EditAlbum?id=${id}`
   })
 }
 

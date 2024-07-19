@@ -3,8 +3,8 @@
     <div class="album-name">
       <div class="album-name-header">作品集名称</div>
       <up-skeleton :rows="3" :loading="loading">
-        <div class="album-name-content" @click="show = true">
-          <span>{{ title || '请输入作品集名称' }}</span>
+        <div class="album-name-content" v-if="album" @click="show = true">
+          <span>{{ album.title }}</span>
         </div>
       </up-skeleton>
     </div>
@@ -19,26 +19,19 @@
         </div>
       </div>
       <up-skeleton :rows="6" :loading="loading">
-        <div class="album-photo-main" v-if="photo.length">
-            <div v-for="item,index in photo" :key="index" class="album-photo-main-item" @click=" add || del ? '' : previewPhoto(item)">
-            <image :src="item" class="photo" mode="aspectFill" fade-show="true" />
-              <div class="delete" v-if="del" @click="deletePhoto(index)">
+        <div class="album-photo-main">
+            <div v-for="item,index in photo" :key="index" class="album-photo-main-item" @click=" add || del ? '' : previewPhoto(item.url)">
+            <image :src="item.url" class="photo" mode="aspectFill" fade-show="true" />
+              <div class="delete" v-if="del" @click="deletePhoto(item.id)">
                 <div class="delete-icon"></div>
               </div>
-              <div class="add" v-if="add || coverId == index" @click="setCover(item.id)">
+              <div class="add" v-if="add" @click="setCover(item.id)">
                 <div class="add-icon">+</div>
               </div>
             </div>
         </div>
-        <div class="album-photo-empty">
-          <image src="/static/my/empty-album.svg" />
-          <div class="title">快上传优秀的作品吧</div>
-        </div>
       </up-skeleton>
     </div>
-  </div>
-  <div class="album-footer">
-    <div class="album-footer-btn">创建相册</div>
   </div>
   <up-popup :show="progressShow"  mode="center" :round="10" >
     <view class="popup-progress">
@@ -51,7 +44,7 @@
   <up-popup :show="show" @close="show = false" :round="10" closeable class="relative">
     <view class="popup">
       <div class="title">作品集名称</div>
-      <div class="desc">
+      <div class="desc" v-if="album">
         <input v-model="title" placeholder="请输入"  />
       </div>
       <div class="btn-group">
@@ -78,7 +71,6 @@ const progressShow = ref(false)
 const show = ref(false)
 const progressList = ref<any>([])
 const title = ref()
-const coverId = ref(0)
 
 const handleUpload = () => {
   uni.chooseImage({
@@ -88,6 +80,7 @@ const handleUpload = () => {
       loading.value = true;
       progressShow.value = true
       const { uploadFile, getConfig } = useUpload(0)
+      const urlList = ref<any>([])
       try {
         progressList.value = tempFilePaths.map(() => 0)
         await Promise.all(
@@ -96,12 +89,14 @@ const handleUpload = () => {
             const picUrl = await uploadFile(filePath, progress => {
               progressList.value[index] = progress
             })
-            photo.value.unshift(picUrl)
+            urlList.value.push(picUrl)
             progressShow.value = false
           })
         )
       } finally {
-        message({ title: '上传成功' })
+        await updateAlbumPhoto({ albumId: id.value, urlList: urlList.value })
+        await getData()
+        message({ title: '更新成功' })
         loading.value = false;
       }
     },
@@ -109,17 +104,38 @@ const handleUpload = () => {
 }
 
 const deletePhoto = async (id: any) => {
-    photo.value.splice(id, 1)
+  modal({ title: '确认删除吗', content: '删除后无法撤销'}).then(async () => {
+    loading.value = true
+    await deleteAlbumPhoto(id)
     message({ title: '删除成功' })
+    await getData()
+    loading.value = false
+  })
 }
 
-const setCover = (id: any) => {
-  coverId.value = id
-  message({ title: '设置成功' })
+const setCover = (photoId: any) => {
+  modal({ title: '确认设置吗', content: '设置这张照片为封面'}).then(async () => {
+    loading.value = true
+    const updateData = { userId: getUserInfo?.userId, title: title.value, sortOrder: 1, id: id.value, coverPhotoId: photoId  }
+    await updateAlbum(updateData)
+    message({ title: '设置成功' })
+    await getData()
+    loading.value = false
+  })
 }
 
 const updateTitle = async () => {
-  message({ title: '设置成功' })
+  if(!title.value) {
+    message({ title: '作品集名称不能为空' })
+    return
+  }
+  loading.value = true
+  const updateData = { userId: getUserInfo?.userId, title: title.value, sortOrder: 1, id: id.value }
+  await updateAlbum(updateData)
+  await getData()
+  message({ title: '更新成功' })
+  loading.value = false
+  show.value = false
 }
 
 const previewPhoto = (picUrl: string) => {
@@ -129,6 +145,22 @@ const previewPhoto = (picUrl: string) => {
     current: picUrl
   })
 }
+
+const getData = async () => {
+  loading.value = true
+  try {
+    photo.value = (await getPhotoPage({ pageNo: 1, pageSize: 100, albumId: id.value })).data?.list || []
+    album.value = (await getAlbum(id.value)).data
+    title.value = album.value.title
+  } finally {
+    loading.value = false
+  }
+}
+
+onLoad(async options => {
+  id.value = options?.id
+  await getData()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -175,30 +207,6 @@ const previewPhoto = (picUrl: string) => {
   width: 500rpx;
   border-radius: 32rpx;
   padding: 32rpx;
-}
-.album-footer {
-  box-sizing: border-box;
-  padding: 16rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  width: 100vw;
-  bottom: 0;
-  height: 160rpx;
-  background-color: #fff;
-
-  &-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ba2636;
-    width: 200rpx;
-    height: 50rpx;
-    color: #fff;
-    padding: 16rpx;
-    border-radius: 12rpx;
-  }
 }
 .album {
   box-sizing: border-box;
@@ -303,21 +311,6 @@ const previewPhoto = (picUrl: string) => {
         }
 }
 
-    }
-
-    &-empty {
-      margin-top: 100rpx;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      align-items: center;
-      justify-content: center;
-
-      .title {
-        margin-top: 80rpx;
-        color: rgba(0, 0, 0, 0.30);
-        font-size: 32rpx;
-      }
     }
   }
 }

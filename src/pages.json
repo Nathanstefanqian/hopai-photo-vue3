@@ -7,6 +7,12 @@
       }
     },
     {
+      "path": "components/my/CreateAlbum",
+      "style": {
+        "navigationBarTitleText": "创建相册"
+      }
+    },
+    {
       "path": "components/my/edit/Order",
       "style": {
         "navigationBarTitleText": "接单信息"
@@ -41,7 +47,7 @@
       }
     },
     {
-      "path": "components/my/CreateAlbum",
+      "path": "components/my/EditAlbum",
       "style": {
         "navigationBarTitleText": "编辑相册"
       }

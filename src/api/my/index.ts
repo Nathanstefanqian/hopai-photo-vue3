@@ -60,3 +60,20 @@ export const getPhoto = async (id: any) => {
   return await request.get(`/member/photo/get?id=${id}`)
 }
 
+// 更新代表作
+export const updateAlbum = async (data: any) => {
+  return await request.put('/member/album/update', data)
+}
+
+// 更新代表作中的照片 批量上传
+export const updateAlbumPhoto = async (data: any) => {
+  return await request.post('/member/photo/create', data)
+}
+
+// 删除代表作中的照片
+export const deleteAlbumPhoto = async (id: any) => {
+  return await request.delete(`/member/photo/delete?id=${id}`)
+}
+
+
+

@@ -62,6 +62,7 @@ const handleCreate = () => {
   })
 }
 
+
 onMounted(async () => {
     if(!isLoggedIn) {
       modal({ title: '您还没登录哦!', content: '登录即可使用小程序功能' }).then(() => {
@@ -150,7 +151,7 @@ onMounted(async () => {
           font-weight: 300;
         }
         .header-create {
-          font-size: 28rpx;
+          font-size: 24rpx;
           padding: 8rpx 16rpx;
           color: #ba2636;
           border-radius: 12rpx;

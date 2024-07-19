@@ -206,6 +206,52 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+.basic {
+  background-color: #f6f6f6;
+  padding: 32rpx;
+  box-sizing: border-box;
+  min-height: 100vh;
+  &-card {
+    box-sizing: border-box;
+    width: 100%;
+    // min-height: 1100rpx; /* 可选：限制卡片的最大宽度 */
+    background-color: #fff;
+    padding: 32rpx;
+    border-radius: 24rpx;
+    
+    &-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 40rpx 0;
+      border-bottom: 0.3rpx solid rgba(0,0,0,0.1);
+      align-items: center;
+      .content {
+        display: flex;
+        justify-content: flex-end;
+        font-size: 28rpx;
+        margin-right: 10rpx;
+        width: 400rpx;
+        word-wrap: break-word;
+      }
+
+      &-title {
+        font-weight: 200;
+      }
+
+      &-bgc {
+        width: 300rpx;
+        height: 150rpx;
+        border-radius: 32rpx;
+      }
+
+      &-image {
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: 50%;
+      }
+    }
+  }
+}
 .active {
   background-color: #ba2636 !important;
   color: #fff !important;
@@ -263,53 +309,6 @@ onMounted(async () => {
       &-accept {
         color: #fff;
         background-color: #ba2636;
-      }
-    }
-  }
-}
-.basic {
-  background-color: #f6f6f6;
-  padding: 32rpx;
-  box-sizing: border-box;
-  min-height: 100vh;
-  &-card {
-    box-sizing: border-box;
-    width: 100%;
-    // min-height: 1100rpx; /* 可选：限制卡片的最大宽度 */
-    background-color: #fff;
-    padding: 32rpx;
-    border-radius: 24rpx;
-    
-    &-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 40rpx 0;
-      border-bottom: 0.3rpx solid rgba(0,0,0,0.1);
-      align-items: center;
-      .content {
-        display: flex;
-        justify-content: flex-end;
-        font-size: 28rpx;
-        margin-right: 10rpx;
-        width: 400rpx;
-        word-wrap: break-word;
-      }
-
-
-      &-title {
-        font-weight: 200;
-      }
-
-      &-bgc {
-        width: 300rpx;
-        height: 150rpx;
-        border-radius: 32rpx;
-      }
-
-      &-image {
-        width: 100rpx;
-        height: 100rpx;
-        border-radius: 50%;
       }
     }
   }
