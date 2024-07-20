@@ -3,8 +3,8 @@
     <div class="album-name">
       <div class="album-name-header">作品集名称</div>
       <up-skeleton :rows="3" :loading="loading">
-        <div class="album-name-content" @click="show = true">
-          <span>{{ title || '请输入作品集名称' }}</span>
+        <div class="album-name-content">
+          <input class="title" v-model="title" placeholder="请输入作品集名称" />
         </div>
       </up-skeleton>
     </div>
@@ -14,8 +14,6 @@
         <div class="btn">
           <div class="btn-add mr-[10rpx]" @click="handleUpload">+ 添加</div>
           <div class="btn-add mr-[10rpx]" @click="del = !del">删除</div>
-          <div class="btn-add" @click="add = !add">设置封面</div>
-
         </div>
       </div>
       <up-skeleton :rows="6" :loading="loading">
@@ -25,12 +23,9 @@
               <div class="delete" v-if="del" @click="deletePhoto(index)">
                 <div class="delete-icon"></div>
               </div>
-              <div class="add" v-if="add || coverId == index" @click="setCover(item.id)">
-                <div class="add-icon">+</div>
-              </div>
             </div>
         </div>
-        <div class="album-photo-empty">
+        <div class="album-photo-empty" v-else>
           <image src="/static/my/empty-album.svg" />
           <div class="title">快上传优秀的作品吧</div>
         </div>
@@ -38,7 +33,7 @@
     </div>
   </div>
   <div class="album-footer">
-    <div class="album-footer-btn">创建相册</div>
+    <div class="album-footer-btn" @click="handleCreate">创建相册</div>
   </div>
   <up-popup :show="progressShow"  mode="center" :round="10" >
     <view class="popup-progress">
@@ -62,14 +57,13 @@
 </template>
 
 <script setup lang="ts">
-import { getPhotoPage, getAlbum, updateAlbum, deleteAlbumPhoto, updateAlbumPhoto } from '@/api/my'
+import { createAlbum } from '@/api/my'
 import { useUpload } from '@/hooks/useUpload';
 import { useNotification } from '@/hooks/useNotification'
 import { useUserStore } from '@/pinia/user'
 const { getUserInfo } = useUserStore()
 const { message, modal } = useNotification()
 const photo = ref<any>([])
-const album = ref()
 const loading = ref(false)
 const del = ref(false)
 const add = ref(false)
@@ -78,9 +72,31 @@ const progressShow = ref(false)
 const show = ref(false)
 const progressList = ref<any>([])
 const title = ref()
-const coverId = ref(0)
+
+const handleCreate = async () => {
+  if(!title.value) {
+    message({'title': '作品集名称不能为空哦'})
+    return
+  }
+  if(!photo.value.length) {
+    message({'title': '至少上传一张照片哦'})
+    return
+  }
+  const data = { userId: getUserInfo?.userId, title: title.value, sortOrder: 1, urlList: photo.value }
+  loading.value = true
+  try {
+    await createAlbum(data)
+  } finally {
+    loading.value = false
+    message({ title: '创建成功', icon: 'success' })
+    setTimeout(() => {
+      uni.navigateBack()
+    }, 1000);
+  }
+}
 
 const handleUpload = () => {
+
   uni.chooseImage({
     count: 9,
     success: async (res) => {
@@ -109,17 +125,13 @@ const handleUpload = () => {
 }
 
 const deletePhoto = async (id: any) => {
-    photo.value.splice(id, 1)
-    message({ title: '删除成功' })
-}
-
-const setCover = (id: any) => {
-  coverId.value = id
-  message({ title: '设置成功' })
+  photo.value.splice(id, 1)
+  message({ title: '删除成功' })
 }
 
 const updateTitle = async () => {
   message({ title: '设置成功' })
+  show.value = false
 }
 
 const previewPhoto = (picUrl: string) => {
@@ -219,6 +231,9 @@ const previewPhoto = (picUrl: string) => {
       background-color: #fff;
       padding: 32rpx;
       border-radius: 12rpx;
+      .title {
+        font-size: 28rpx !important;
+      }
     }
   }
 
@@ -246,7 +261,6 @@ const previewPhoto = (picUrl: string) => {
 
     &-main {
       display: flex;
-      justify-content: space-between;
       width: 100%;
       margin-top: 36rpx;
       flex-wrap: wrap;
@@ -256,7 +270,8 @@ const previewPhoto = (picUrl: string) => {
         width: 210rpx;
         height: 280rpx;
         border-radius: 12rpx;
-        margin-bottom: 32rpx;
+        margin-bottom: 28rpx;
+        margin-right: 20rpx;
 
       }
       

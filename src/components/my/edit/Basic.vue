@@ -92,7 +92,7 @@ import { getUserInfo, updateBasicInfo } from '@/api/my/index';
 import AreaPicker from './AreaPicker.vue';
 import Calendar from './Calendar.vue'
 import { UserVO } from '@/api/auth/types';
-import { formatDate } from '@/utils/tools';
+import { formatDate, validatePhoneNumber } from '@/utils/tools';
 import { useNotification } from '@/hooks/useNotification'
 import { useUpload } from '@/hooks/useUpload'
 
@@ -184,6 +184,14 @@ const updatePicture = async () => {
 }
 
 const updateInfo = async () => {
+  if(!popupContent.value) {
+    message({"title": "该信息不能为空哦！"})
+    return
+  }
+  if(currentField.value == 'mobile' && !validatePhoneNumber(popupContent.value)) {
+    message({"title": "不是合法手机号哦！"})
+    return
+  }
   try {
     let updateData = {};
     if (currentField.value === 'area') {

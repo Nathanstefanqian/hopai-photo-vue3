@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <up-skeleton rows="3" :loading="loading">
     <div class="photo-layout">
       <scroll-view class="photo-scrollview" scroll-x="true">
@@ -177,4 +177,18 @@ onMounted(async () => {
     height: 1rpx;
   }
 }
+</style> -->
+
+<template>
+  <div>
+
+  </div>
+</template>
+
+<script setup lang="ts">
+
+</script>
+
+<style scoped>
+
 </style>

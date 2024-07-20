@@ -8,6 +8,7 @@
       confirmColor="#ba2636"
       @confirm="confirmDate"
       v-model="internalValue"
+      :min-date="-631180800000"
       mode="date"
     ></up-datetime-picker>
   </div>

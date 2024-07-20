@@ -30,6 +30,11 @@ export const updateBasicInfo = async (data: any) => {
   return await request.post('/member/photographer/update', data)
 }
 
+// 更新接单
+export const updateOrderInfo = async (data: any) => {
+  return await request.post('/member/photographer/updateOrderConfig', data)
+}
+
 // 获取地区树
 export const getArea = async () => {
   return await request.get('/system/area/tree')
@@ -75,5 +80,14 @@ export const deleteAlbumPhoto = async (id: any) => {
   return await request.delete(`/member/photo/delete?id=${id}`)
 }
 
+// 创建代表作
+export const createAlbum = async (data: any) => {
+  return await request.post('/member/album/create', data)
+}
 
+
+// 删除代表作
+export const deleteAlbum = async (id: any) => {
+  return await request.delete(`/member/album/delete?id=${id}`)
+}
 

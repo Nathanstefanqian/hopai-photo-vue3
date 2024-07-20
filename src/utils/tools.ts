@@ -36,3 +36,12 @@ export function formatDate(date: dayjs.ConfigType, format?: string): string {
   }
   return dayjs(date).format(format)
 }
+
+
+export const validatePhoneNumber = (phoneNumber: any) => {
+  // 定义中国大陆手机号码的正则表达式
+  const regex = /^(?:\+86)?1[3-9]\d{9}$/;
+  
+  // 测试手机号是否符合正则表达式
+  return regex.test(phoneNumber);
+}

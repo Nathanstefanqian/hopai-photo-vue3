@@ -83,6 +83,10 @@ const getTitle = (field: string) => {
 }
 
 const updateInfo = async () => {
+  if(!popupContent.value) {
+    message({"title": "该信息不能为空哦！"})
+    return
+  }
   if (user.value.appPhotographerInfoBaseVO) {
     (user.value.appPhotographerInfoBaseVO as any)[currentField.value] = popupContent.value // 类型断言
     await updateUserInfo(user.value.appPhotographerInfoBaseVO)
@@ -191,6 +195,7 @@ onMounted(async () => {
         margin-bottom: 32rpx;
 
         .delete {
+        font-weight: 400;
           font-size: 24rpx;
           padding: 8rpx 16rpx;
           color: #ba2636;

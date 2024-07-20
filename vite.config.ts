@@ -4,10 +4,12 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import WindiCSS from 'vite-plugin-windicss';
 import MiniProgramTailwind from '@dcasia/mini-program-tailwind-webpack-plugin/rollup';
-
+import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
-  plugins: [uni(),
+  plugins: [
+    visualizer({ open: true }),
+    uni(),
     WindiCSS(),
     MiniProgramTailwind(),
     AutoImport({

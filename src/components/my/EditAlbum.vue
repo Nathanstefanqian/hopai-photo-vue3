@@ -1,7 +1,10 @@
 <template>
   <div class="album">
     <div class="album-name">
-      <div class="album-name-header">作品集名称</div>
+      <div class="album-name-header">
+        <span>作品集名称</span>
+        <div class="btn-del" @click="deleteAlbumHandler">删除相册</div>
+      </div>
       <up-skeleton :rows="3" :loading="loading">
         <div class="album-name-content" v-if="album" @click="show = true">
           <span>{{ album.title }}</span>
@@ -13,8 +16,8 @@
         <div class="title">作品集</div>
         <div class="btn">
           <div class="btn-add mr-[10rpx]" @click="handleUpload">+ 添加</div>
-          <div class="btn-add mr-[10rpx]" @click="del = !del">删除</div>
-          <div class="btn-add" @click="add = !add">设置封面</div>
+          <div class="btn-add mr-[10rpx]" @click="del = !del, add = false">删除</div>
+          <div class="btn-add" @click="add = !add, del = false">设置封面</div>
 
         </div>
       </div>
@@ -55,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { getPhotoPage, getAlbum, updateAlbum, deleteAlbumPhoto, updateAlbumPhoto } from '@/api/my'
+import { getPhotoPage, getAlbum, updateAlbum, deleteAlbumPhoto, updateAlbumPhoto, deleteAlbum } from '@/api/my'
 import { useUpload } from '@/hooks/useUpload';
 import { useNotification } from '@/hooks/useNotification'
 import { useUserStore } from '@/pinia/user'
@@ -103,7 +106,23 @@ const handleUpload = () => {
   })
 }
 
+const deleteAlbumHandler = async () => {
+  modal({ title: '确认删除该相册吗', content: '删除后无法撤销'}).then(async () => {
+    loading.value = true
+    await deleteAlbum(id.value)
+    message({ title: '删除成功' })
+    setTimeout(() => {
+      loading.value = false
+      uni.navigateBack()
+    }, 2000);
+  })
+}
+
 const deletePhoto = async (id: any) => {
+  if(id == album.value.coverPhotoId) {
+    message({ title: '该照片为封面，无法删除' })
+    return
+  }
   modal({ title: '确认删除吗', content: '删除后无法撤销'}).then(async () => {
     loading.value = true
     await deleteAlbumPhoto(id)
@@ -220,7 +239,18 @@ onLoad(async options => {
     font-weight: 200;
 
     &-header {
+      display: flex;
+      justify-content: space-between;
       margin-bottom: 32rpx;
+
+      .btn-del {
+        font-weight: 400;
+        padding: 8rpx 16rpx;
+        border-radius: 12rpx;
+        border: 0.66rpx solid #ba2636;
+        color: #ba2636;
+        font-size: 24rpx;
+      }
     }
 
     &-content {
@@ -254,7 +284,6 @@ onLoad(async options => {
 
     &-main {
       display: flex;
-      justify-content: space-between;
       width: 100%;
       margin-top: 36rpx;
       flex-wrap: wrap;
@@ -264,7 +293,8 @@ onLoad(async options => {
         width: 210rpx;
         height: 280rpx;
         border-radius: 12rpx;
-        margin-bottom: 32rpx;
+        margin-bottom: 28rpx;
+        margin-right: 20rpx;
 
       }
       

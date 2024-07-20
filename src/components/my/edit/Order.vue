@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
 import AreaPicker from './AreaPicker.vue'
-import { getSpu, getUserInfo, updateBasicInfo } from '@/api/my'
+import { getSpu, getUserInfo, updateBasicInfo, updateOrderInfo } from '@/api/my'
 import { useNotification } from '@/hooks/useNotification' 
 import { UserVO } from '@/api/auth/types' 
 const loading = ref(false)
@@ -68,8 +68,12 @@ const areaModel = ref({ areaName: '' , areaId: '' })
 const { message,modal } = useNotification()
 
 const updateBizList = async () => {
-  const updateData = { categoryIds: user.value?.categoryIds, userId: user.value?.appPhotographerInfoBaseVO.userId }
-  await updateBasicInfo(updateData)
+  if(!user.value?.categoryIds.length) {
+    message({ title: '至少保留一个接单类型哦！' })
+    return
+  }
+  const updateData = { categoryIds: user.value?.categoryIds, userId: user.value?.appPhotographerInfoBaseVO.userId, areaIds: user.value?.areaIds }
+  await updateOrderInfo(updateData)
   await getData()
   message({ title: '更新成功' })
   change.value = false
@@ -81,18 +85,22 @@ const updateArea = async () => {
     return
   }
   user.value?.areaIds.unshift(areaModel.value.areaId)
-  const updateData = { areaIds: user.value?.areaIds, userId: user.value?.appPhotographerInfoBaseVO.userId }
-  await updateBasicInfo(updateData)
+  const updateData = { areaIds: user.value?.areaIds, userId: user.value?.appPhotographerInfoBaseVO.userId,  categoryIds: user.value?.categoryIds}
+  await updateOrderInfo(updateData)
   await getData()
   message({ title: '更新成功' })
   show.value = false
 }
 
 const deleteArea = async (index: number) => {
+  if(user.value?.areaIds.length == 1) {
+    message({ title: '至少保留一个接单区域哦！' })
+    return
+  }
   modal({ title: '确认删除吗', content: '删除没法撤回噢'}).then(async () => {
     user.value?.areaIds.splice(index, 1)
-    const updateData = { areaIds: user.value?.areaIds, userId: user.value?.appPhotographerInfoBaseVO.userId }
-    await updateBasicInfo(updateData)
+    const updateData = { areaIds: user.value?.areaIds, userId: user.value?.appPhotographerInfoBaseVO.userId, categoryIds: user.value?.categoryIds }
+    await updateOrderInfo(updateData)
     await getData()
     message({ title: '删除成功' })
   }).catch(() => message({ title: '删除取消' }))
