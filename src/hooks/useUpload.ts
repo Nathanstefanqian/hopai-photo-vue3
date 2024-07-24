@@ -2,7 +2,7 @@ import { Base64 } from '@/utils/bundle'
 import { makeUUID } from '@/utils/tools';
 import { useUserStore } from '@/pinia/user';
 import * as stsApi from '@/api/sts'
-import CryptoJS from 'crypto-js'
+import { enc, HmacSHA1 } from 'crypto-js'
 // 我们需要调用hopai-user-profile 和 hopai-user-portrait 上传功能，因此要写两份配置文件
 interface Config {
   bucketName: string;
@@ -22,7 +22,7 @@ const config = ref<Config>({
 
 
 const computeSignature = (accessKeySecret: string, canonicalString: string) => {
-  return CryptoJS.enc.Base64.stringify(CryptoJS.HmacSHA1(canonicalString, accessKeySecret));
+  return enc.Base64.stringify(HmacSHA1(canonicalString, accessKeySecret));
 }
 
 

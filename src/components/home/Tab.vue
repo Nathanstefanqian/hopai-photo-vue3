@@ -1,23 +1,47 @@
 <template>
-  <scroll-view class="home-main-tab-scrollview" scroll-x="true">
+  <scroll-view class="home-main-tab-scrollview" scroll-x="true" :class="{'fixed': props.isFixed }">
     <div class="home-main-tab">
-      <div class="home-main-tab-item" v-for="item,index in ['待拍摄', '待确认', '进行中','已完成','已取消','退款售后']" @click="active = index" :key="index">
+      <div class="home-main-tab-item" v-for="item, index in ['待拍摄', '待确认', '进行中','已完成','退款售后']" 
+           @click="handleClick(index)" :key="index">
         <span class="mb-[10rpx]">{{ item }}</span>
-        <div class="svg-icon" v-if="active == index" />
+        <div class="svg-icon" v-if="active === index" />
       </div>
     </div>
   </scroll-view>
 </template>
 
 <script setup lang="ts">
-const active = ref(0)
+const props = defineProps<{ modelValue: number; isFixed: boolean }>();
+const emit = defineEmits<{ (e: 'update:modelValue', value: number): void }>();
+
+const active = ref(props.modelValue);
+
+watch(() => props.modelValue, (newVal) => {
+  active.value = newVal;
+});
+
+const handleClick = (index: number) => {
+  active.value = index;
+  emit('update:modelValue', index);
+};
 </script>
 
 <style lang="scss" scoped>
+.fixed {
+  position: fixed;
+  z-index: 111;
+  top: 0rpx;
+  left: 0rpx;
+  width: calc(100vw - 64rpx) !important;
+  padding-top: 116rpx !important;
+  backdrop-filter: blur(30px); /* 背景模糊 */
+  transition: all ease 0.5s;
+  padding: 0 32rpx;
+}
+
 .home-main-tab-scrollview {
   width: 100%;
   white-space: nowrap;
-
 }
 .home-main-tab {
   display: flex;

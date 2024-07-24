@@ -46,11 +46,11 @@ const getData = async () => {
   } finally {
     loading.value = false
   }
-
 }
-onMounted(async () => {
+onShow(async () => {
   await getData()
 })
+
 </script>
 
 <style lang="scss" scoped>

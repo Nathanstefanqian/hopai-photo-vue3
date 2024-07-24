@@ -38,7 +38,7 @@
   <up-popup :show="show" @close="show = false" :round="10" closeable class="relative">
     <view class="popup">
       <div class="title">{{ popupTitle }}</div>
-      <input class="desc" v-model="popupContent" focus placeholder="请输入" />
+      <input class="desc" v-model="popupContent" placeholder="请输入" />
       <div class="btn-group">
         <button class="btn btn-accept" @click="updateInfo">确定</button>
       </div>

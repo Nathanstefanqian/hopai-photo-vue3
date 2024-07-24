@@ -116,5 +116,6 @@ onMounted(async () => {
 <style scoped>
 .picker-trigger {
   cursor: pointer;
+  width: 500rpx;
 }
 </style>

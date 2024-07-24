@@ -1,14 +1,16 @@
 <template>
-  <div class="home h-648rpx  w-100vw relative">
+  <div class="home  w-100vw relative" ref="home">
+    <div class="blank w-100vw h-[1rpx]"></div>
     <div class="home-ball-two"></div>
     <div class="home-ball-one"></div>
     <div class="home-header">
       <Header />
     </div>
-    <div class="home-main">
-      <Tab />
-      <Container />
-    </div>
+    <view class="home-main" ref="homeMain">
+      <Tab :isFixed="isFixed" v-model="active" />
+      <Container :active="active" />
+      <div class="blank w-100vw h-[1rpx]"></div>
+    </view>
   </div>
 </template>
 
@@ -16,6 +18,31 @@
 import Container from '@/components/home/Container.vue'
 import Header from '@/components/home/Header.vue'
 import Tab from '@/components/home/Tab.vue'
+
+
+const isFixed = ref(false)
+const query = uni.createSelectorQuery();
+const active = ref(0)
+
+const calculateBorderRadius = () => {
+  query.select('.home-main').boundingClientRect((rect) => {
+    if (rect.top < -100) {
+      isFixed.value = true
+    }
+    else {
+      isFixed.value = false
+    }
+  }).exec();
+}
+
+onPageScroll(() => {
+  calculateBorderRadius()
+})
+
+
+onShow(() => {
+
+})
 </script>
 
 <style lang="scss" scoped>
@@ -23,7 +50,7 @@ import Tab from '@/components/home/Tab.vue'
 
 .home {
   background: linear-gradient(132deg, #E93544 6.08%, #E85446 57.89%, #EA6348 96.78%);
-
+  overflow: hidden;
   &-ball-one {
     position: absolute;
     top: -150rpx;
@@ -52,9 +79,8 @@ import Tab from '@/components/home/Tab.vue'
   
   &-main {
     box-sizing: border-box;
-    position: absolute;
-    left:0;
-    top: 558rpx;
+    margin-top: 558rpx;
+    min-height: calc( 100vh - 558rpx );
     width: 100%;
     padding: 0 32rpx;
     border-radius: 48rpx 48rpx 0 0;

@@ -16,11 +16,13 @@ declare module 'vue' {
     Device: typeof import('./src/components/my/edit/Device.vue')['default']
     EditAlbum: typeof import('./src/components/my/EditAlbum.vue')['default']
     Header: typeof import('./src/components/home/Header.vue')['default']
+    ImgCrop: typeof import('./src/components/img-crop/img-crop.vue')['default']
     Money: typeof import('./src/components/my/edit/Money.vue')['default']
     Order: typeof import('./src/components/my/edit/Order.vue')['default']
     Photo: typeof import('./src/components/my/edit/Photo.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Schedule: typeof import('./src/components/order/Schedule.vue')['default']
     Tab: typeof import('./src/components/home/Tab.vue')['default']
   }
 }

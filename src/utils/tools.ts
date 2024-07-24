@@ -1,4 +1,8 @@
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn'; // 如果需要中文星期几
+import weekOfYear from 'dayjs/plugin/weekOfYear'; // 如果需要插件支持
+dayjs.extend(weekOfYear);
+dayjs.locale('zh-cn')
 
 export const makeUUID = () => {
   // 获取当前时间戳
@@ -44,4 +48,58 @@ export const validatePhoneNumber = (phoneNumber: any) => {
   
   // 测试手机号是否符合正则表达式
   return regex.test(phoneNumber);
+}
+
+export const hasDuplicates = (array: any) => {
+  console.log(array)
+  console.log(new Set(array).size)
+  console.log(array.length)
+  return new Set(array).size !== array.length;
+}
+
+export const formatDateWeek = (inputDate: any) => {
+  // 解析输入的日期字符串
+  const date = dayjs(inputDate);
+
+  // 格式化为 YYYY-MM-DD 星期几
+  const formattedDate = date.format('YYYY-MM-DD dddd'); // 'dddd' 依据语言环境会显示为完整的星期几
+
+  return formattedDate;
+}
+
+export const formatTime = (inputDate: any) => {
+  const date = dayjs(inputDate)
+  const formattedTime = date.format('HH:mm')
+  return formattedTime
+}
+
+export const getStatus = (statusCode: any) => {
+  switch (statusCode) {
+    case 0:
+      return '待支付'
+    case 1:
+      return '待确认'
+    case 2:
+      return '待拍摄'
+    case 3:
+      return '已拍摄'
+    case 4:
+      return '待选图'
+    case 5:
+      return '修图中'
+    case 6:
+      return '待交付'
+    case 7:
+      return '待评价'
+    case 100:
+      return '已完成'
+    case 10:
+      return '订单已取消'
+    case 20:
+      return '处理中'
+    case 30:
+      return '退款成功'
+    default:
+      return '未知状态'
+  }
 }

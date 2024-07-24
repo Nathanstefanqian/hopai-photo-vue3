@@ -1,0 +1,19 @@
+{
+    "id": "img-crop",
+    "name": "vue3 高性能图片裁切 img-crop",
+    "displayName": "vue3 高性能图片裁切 img-crop",
+    "version": "1.0.0",
+    "description": "图片裁切、头像裁切",
+    "keywords": [
+        "vue3",
+        "typescript",
+        "图片裁切",
+        "头像裁切"
+    ],
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ]
+    }
+}

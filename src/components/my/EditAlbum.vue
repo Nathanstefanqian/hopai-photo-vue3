@@ -40,7 +40,7 @@
     <view class="popup-progress">
       <div v-for="(progress,index) in progressList" :key="index">
         <span>上传进度： {{ progress }}%</span>
-        <progress :percent="progress" show-info stroke-width="3" />
+        <progress :percent="progress" activeColor="#ba2636" show-info stroke-width="3" />
       </div>
     </view>
   </up-popup>

@@ -7,16 +7,14 @@
           <div class="btn-add" @click="show = true">+ 增加</div>
         </div>
         <up-skeleton :loading="loading" rows="3">
-          <scroll-view class="order-main-area-main-scrollview" scroll-y="true">
-            <div class="order-main-area-main" v-if="user">
-              <div class="order-main-area-main-item" v-for="item,index in user.areaNames" :key="index">
-                <div class="content">{{ item }}</div>
-                  <div class="delete" @click="deleteArea(index)">
-                    <div class="delete-center"></div>
-                  </div>
-              </div>
+          <div class="order-main-area-main" v-if="user">
+            <div class="order-main-area-main-item" v-for="item,index in user.areaNames" :key="index">
+              <div class="content">{{ item }}</div>
+                <div class="delete" @click="deleteArea(index)">
+                  <div class="delete-center"></div>
+                </div>
             </div>
-          </scroll-view>
+          </div>
         </up-skeleton>
       </div>
       <div class="order-main-type">
@@ -59,6 +57,7 @@ import AreaPicker from './AreaPicker.vue'
 import { getSpu, getUserInfo, updateBasicInfo, updateOrderInfo } from '@/api/my'
 import { useNotification } from '@/hooks/useNotification' 
 import { UserVO } from '@/api/auth/types' 
+import { hasDuplicates } from '@/utils/tools'
 const loading = ref(false)
 const spuList = ref<any>([])
 const user = ref<UserVO>()
@@ -82,6 +81,10 @@ const updateBizList = async () => {
 const updateArea = async () => {
   if(!areaModel.value.areaId) {
     message({ title: '请选择地区'})
+    return
+  }
+  if(user.value?.areaIds.includes(areaModel.value.areaId)) {
+    message({ title: '该地区已存在啦！'})
     return
   }
   user.value?.areaIds.unshift(areaModel.value.areaId)
@@ -129,10 +132,6 @@ onMounted(async () => {
   background-color: #f6f6f6;
   padding: 32rpx;
 
-  .order-main-area-main-scrollview {
-    width: 100%;
-    white-space: nowrap;
-  }
 
   &-main {
     display: flex;
@@ -163,7 +162,6 @@ onMounted(async () => {
       }
 
       &-main {
-      max-height:550rpx;
         &-item {
           display: flex;
           justify-content: space-between;

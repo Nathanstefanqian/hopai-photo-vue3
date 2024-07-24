@@ -81,10 +81,18 @@
     <view class="popup-progress">
       <div v-for="(progress,index) in progressList" :key="index">
         <span>上传进度： {{ progress }}%</span>
-        <progress :percent="progress" show-info stroke-width="3" />
+        <progress :percent="progress" activeColor="#ba2636" show-info stroke-width="3" />
       </div>
     </view>
   </up-popup>
+  <img-crop 
+        v-if="chooseAvatarUrl"
+        :url="chooseAvatarUrl"
+        :width="1000"
+        :height="1000"
+        @cancel="chooseAvatarUrl = ''"
+        @success="updateAvatar"
+    />
 </template>
 
 <script setup lang="ts">
@@ -96,6 +104,7 @@ import { formatDate, validatePhoneNumber } from '@/utils/tools';
 import { useNotification } from '@/hooks/useNotification'
 import { useUpload } from '@/hooks/useUpload'
 
+const chooseAvatarUrl = ref('')
 const user = ref<UserVO>({} as UserVO);
 const loading = ref(false);
 const show = ref(false);
@@ -109,6 +118,30 @@ const areaModel = ref({ areaId: null, areaName: '' });
 const { message } = useNotification()
 const progressList = ref<any>([])
 const active = ref()
+
+const updateAvatar = async (filePath: string) => {
+  chooseAvatarUrl.value = ''
+  loading.value = true;
+  progressList.value = [0]
+  progressShow.value = true
+  const { uploadFile, getConfig } = useUpload(0)
+  try {
+    await getConfig()
+    const picUrl = await uploadFile(filePath, progress => {
+      progressList.value[0] = progress
+    })
+    progressShow.value = false
+    if(!picId.value) {
+      await updateBasicInfo({avatar: picUrl, userId: user.value.appPhotographerInfoBaseVO.userId })
+    } else {
+      await updateBasicInfo({ backgroundImageUrl: picUrl, userId: user.value.appPhotographerInfoBaseVO.userId })
+    }
+  } finally {
+    await getData()
+    loading.value = false
+    progressShow.value= false
+  }
+}
 
 const getData = async () => {
   loading.value = true;
@@ -154,32 +187,10 @@ const updatePicture = async () => {
   uni.chooseImage({
     count: 1,
     success: async (res) => {
+      picShow.value = false
       const tempFilePaths:any = res.tempFilePaths;
-      loading.value = true;
-      progressShow.value = true
-      const { uploadFile, getConfig } = useUpload(0)
-      try {
-        progressList.value = tempFilePaths.map(() => 0)
-        await Promise.all(
-          tempFilePaths.map(async (filePath:any, index: number) => {
-            await getConfig()
-            const picUrl = await uploadFile(filePath, progress => {
-              progressList.value[index] = progress
-            })
-            progressShow.value = false
-            if(!picId.value) {
-              await updateBasicInfo({avatar: picUrl, userId: user.value.appPhotographerInfoBaseVO.userId })
-            } else {
-              await updateBasicInfo({ backgroundImageUrl: picUrl, userId: user.value.appPhotographerInfoBaseVO.userId })
-            }
-            await getData()
-          })
-        );
-      } finally {
-        message({ title: '更新成功' })
-        loading.value = false;
-      }
-    },
+      chooseAvatarUrl.value = tempFilePaths[0]
+    }
   })
 }
 
@@ -274,7 +285,7 @@ onMounted(async () => {
   flex-direction: column;
   margin-top: 28rpx;
   padding: 54rpx;
-
+  
   .title {
     font-size: 36rpx;
     font-weight: 500;

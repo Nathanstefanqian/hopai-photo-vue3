@@ -4,7 +4,7 @@
     <div class="my-main">
       <div class="my-main-header">
         <image :src="user?.avatar || '/static/my/avatar.jpg'" class="header-image" @click="previewAvatar" mode="aspectFill"></image>
-        <div class="header-userinfo" @click="login">
+        <div class="header-userinfo" @click="handleUserInfoClick">
           <div class="name">{{ user?.nickname || '未登录' }}</div>
           <div class="desc">{{ user?.appPhotographerInfoBaseVO?.introduction || '登录体验更多功能' }}</div>
         </div>
@@ -26,7 +26,7 @@
           <Album />
         </div>
       </div>
-      <div class="my-main-logout" @click="logout">{{ isLoggedIn ? '退出登录' : '立即登录' }} </div>
+      <div class="my-main-logout" @click="handleLogClick">{{ isLoggedIn ? '退出登录' : '立即登录' }} </div>
     </div>
   </div>
 </template>
@@ -41,10 +41,21 @@ const user = ref<any>({})
 const { logout, isLoggedIn } = useUserStore()
 const { message, modal } = useNotification()
 
-
-
 const login = () => {
   uni.navigateTo({ url: '/pages/auth/index'})
+}
+
+const handleUserInfoClick = () => {
+  if(isLoggedIn) {
+    uni.navigateTo({
+    url: '/components/my/edit/Basic'
+  })
+  }
+}
+
+const handleLogClick = () => {
+  if(isLoggedIn) logout()
+  else login()
 }
 
 const previewAvatar = () => {
@@ -57,21 +68,29 @@ const previewAvatar = () => {
 }
 
 const handleCreate = () => {
+  if(!isLoggedIn) {
+    message({title: '您还未登录哦'})
+    return
+  } 
   uni.navigateTo({
     url: '/components/my/CreateAlbum'
   })
 }
 
-
-onMounted(async () => {
-    if(!isLoggedIn) {
+const getData = async () => {
+  if(!isLoggedIn) {
       modal({ title: '您还没登录哦!', content: '登录即可使用小程序功能' }).then(() => {
         uni.navigateTo({ url: '/pages/auth/index'})
-      }).catch(() => message({ title: '取消了就没法玩咯' }))
+      })
     }
     const res = await getUserInfo()
     user.value = res.data
+}
+
+onShow(async () => {
+  await getData()
 })
+
 </script>
 
 <style lang="scss" scoped>
@@ -131,7 +150,7 @@ onMounted(async () => {
     }
 
     &-basic {
-      margin-bottom: 64rpx;
+      margin-bottom: 70rpx;
       &-header {
         font-size: 36rpx;
         font-weight: 300;

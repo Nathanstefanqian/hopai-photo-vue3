@@ -1,11 +1,56 @@
 {
-  "pages": [
+  "pages": [    
+    {
+    "path": "pages/order/index",
+    "style": {
+      "navigationBarTitleText": "订单",
+      "navigationStyle": "custom"
+    }
+  },
     {
       "path": "pages/my/index",
       "style": {
         "navigationStyle": "custom"
       }
     },
+    {
+      "path": "pages/register/success",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/register/failure",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/register/pending",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/register/form",
+      "style": {
+        "navigationBarTitleText": "申请成为摄影师"
+      }
+    },
+    {
+      "path": "pages/register/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/test/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+
     {
       "path": "components/my/CreateAlbum",
       "style": {
@@ -23,6 +68,9 @@
       "style": {
         "navigationBarTitleText": "基本信息"
       }
+    },
+    {
+      "path": "components/order/Schedule"
     },
     {
       "path": "components/my/edit/Calendar"
@@ -59,13 +107,7 @@
         "navigationBarTitleText": "佣金信息"
       }
     },
-    {
-      "path": "pages/order/index",
-      "style": {
-        "navigationBarTitleText": "订单",
-        "navigationStyle": "custom"
-      }
-    },
+
     {
       "path": "components/home/Container"
     },
