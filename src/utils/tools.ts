@@ -96,10 +96,37 @@ export const getStatus = (statusCode: any) => {
     case 10:
       return '订单已取消'
     case 20:
-      return '处理中'
+      return '退款中'
     case 30:
       return '退款成功'
     default:
       return '未知状态'
+  }
+}
+
+export const activeStatus =  [[1], [2], [3,4,5,6,7], [100, 10], [30, 20]]
+
+export const getStatusBtn = (status: any) => {
+  switch(status) {
+    case 1:
+      return '确认接单'
+    case 2:
+      return '去扫码'
+    case 3:
+      return '去传图'
+    case 4:
+      return '等待客户选图'
+    case 5:
+      return '去修图'
+    case 6:
+      return '等待客户确认'
+    case 7:
+      return '等待客户评价'
+    case 100:
+      return '已完成'
+    case 20:
+      return '退款中'
+    case 30:
+      return '退款成功'
   }
 }

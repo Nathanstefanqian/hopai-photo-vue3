@@ -40,9 +40,9 @@
       </div>
       <div class="mb-[40rpx]"></div>
       <div class="card-op">
-        <span class="card-op-text">无法接单？</span>
-        <div class="card-op-btn" @click="handleTest">
-          确认订单
+        <span class="card-op-text" v-if="item.orderStatus == 1">无法接单？</span>
+        <div class="card-op-btn" @click="handleBtn(item.id, item.orderStatus)">
+          {{ getStatusBtn(item.orderStatus) }}
         </div>
       </div>
     </div>
@@ -55,9 +55,9 @@
 </template>
 
 <script setup lang="ts">
-import { getUserOrders } from '@/api/order/index'
+import { getUserOrders, updateOrderStatus, scanQrCode } from '@/api/home/index'
 import { orderVO } from '@/api/order/types'
-import { formatTime, formatDateWeek, getStatus } from '@/utils/tools'
+import { formatTime, formatDateWeek, getStatus, activeStatus, getStatusBtn } from '@/utils/tools'
 import { useNotification } from '@/hooks/useNotification'
 import { useUserStore } from '@/pinia/user'
 const { isLoggedIn } = useUserStore()
@@ -66,23 +66,46 @@ const props = defineProps<{ active: number }>()
 const loading = ref(false)
 const order = ref<orderVO[]>([])
 
-watch(() => props.active, () => {
+
+const handleBtn = (id: any, status: any) => {
+  if(status == 1) {
+    modal({ title: '确认订单', content: '您将确认客户的拍摄订单,确认订单后请提前与客户确认拍摄任务' }).then(async () => {
+    await updateOrderStatus({ orderId: id, status: 2 })
+    await getData(activeStatus[props.active])
+  })
+  } else if(status == 3) {
+        modal({ title: '等待传图', content: '请前往摄影师PC端传图' }).then(async () => {
+          uni.setClipboardData({ data: 'https://photo.codegod.site'})
+          // message({ title: '摄影师PC端网址已复制' })
+      })
+  } else if(status == 5) {
+      modal({ title: '等待修图', content: '请前往摄影师PC端上传精修图' }).then(async () => {
+        uni.setClipboardData({ data: 'https://photo.codegod.site'})
+        // message({ title: '摄影师PC端网址已复制' })
+    })
+  }
+}
+
+watch(() => props.active, async () => {
   loading.value = true
-  setTimeout(() => loading.value = false , 1000)
+  await getData(activeStatus[props.active])
+  setTimeout(() => {
+    loading.value = false
+  }, 200)
 })
-const getData = async () => {
+
+const getData = async (status: any) => {
   if(!isLoggedIn) {
     modal({ title: '您还没登录哦!', content: '登录即可使用小程序功能' }).then(() => {
       uni.navigateTo({ url: '/pages/auth/index'})
     })
     return
   }
-  order.value = (await getUserOrders({ pageNo: 1, pageSize: 50 })).data.list
-
+  order.value = (await getUserOrders({ pageNo: 1, pageSize: 50, status })).data.list
 }
 
 onShow(async () => {
-  await getData()
+  await getData(activeStatus[0])
 })
 </script>
 
@@ -121,11 +144,11 @@ onShow(async () => {
 
   }
   .card {
-  box-sizing: border-box;
-  padding: 32rpx;
-  border-radius: 24rpx;
-  background-color: #fff;
-  margin-bottom: 40rpx;
+    box-sizing: border-box;
+    padding: 32rpx;
+    border-radius: 24rpx;
+    background-color: #fff;
+    margin-bottom: 40rpx;
 
   &-header {
     &-createtime {
@@ -134,7 +157,7 @@ onShow(async () => {
     }
 
     &-status {
-      font-size: 24rpx;
+      font-size: 28rpx;
       color: #ba2636;
     }
   }
@@ -166,7 +189,7 @@ onShow(async () => {
       padding: 8rpx 16rpx;
       border-radius: 8rpx;
       background: rgba(249, 233, 132, 0.90);
-      font-size: 24rpx;
+      font-size: 28rpx;
       font-weight: 200;
     }
   }
@@ -177,14 +200,15 @@ onShow(async () => {
     &-item {
       display: flex;
       color: rgba(40, 40, 40, 0.50);
-      font-size: 24rpx !important;
+      font-size: 28rpx !important;
       &-title {
         width: 120rpx;
         margin-bottom: 8rpx;
-        font-size: 24rpx !important;
+        font-size: 28rpx !important;
       }
       &-content {
-        font-size: 24rpx !important;
+        flex: 1;
+        font-size: 28rpx !important;
       }
     }
   }

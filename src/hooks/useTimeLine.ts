@@ -129,8 +129,12 @@ export const useTimeLine = (type: 'month' | 'week', chooseDay?: string) => {
       await fetchOrders(startTimestamp, endTimestamp);
     } else {
       calendarData.value = getWeekData(chooseDay);
-      const startTimestamp = dayjs((calendarData.value as DayInfo[])[0].date).valueOf();
-      const endTimestamp = dayjs((calendarData.value as DayInfo[])[(calendarData.value as DayInfo[]).length - 1].date).endOf('day').valueOf();
+      // 同理
+      const currentDate = dayjs();
+      const startMonth = currentDate.subtract(1, 'month');
+      const endMonth = currentDate.add(6, 'month'); 
+      const startTimestamp = startMonth.startOf('month').valueOf();
+      const endTimestamp = endMonth.endOf('month').add(1, 'day').valueOf();
       await fetchOrders(startTimestamp, endTimestamp);
     }
   }

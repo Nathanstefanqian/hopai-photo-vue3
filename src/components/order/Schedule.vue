@@ -29,7 +29,7 @@
               <span class="order-location-desc">{{ item.location }}</span>
             </div>
             <div class="order-people">
-              <image class="order-people-img" src="@/static/my/avatar.jpg" />
+              <image class="order-people-img" :src="item.memberAvatar ? item.memberAvatar : '@/static/my/avatar.jpg' " mode="aspectFill" />
               <span class="order-people-desc">{{ item.memberName }} {{ item.memberPhone }}</span>
             </div>
           </div>
@@ -39,7 +39,6 @@
         <image src="@/static/my/empty.svg" class="mb-[64rpx]" />
         <span class="title">当天没有任务哦</span>
       </div>
-
     </div>
   </div>
 </template>
@@ -66,12 +65,11 @@ const getDayOrderData = async () => {
   else {
     order.value = []
   }
-  console.log(order.value)
 }
 
 watch(() => props.chooseDate, async (newDate) => {
   await getDayOrderData()
-});
+})
 onMounted(async () => {
   await getDayOrderData()
 })
@@ -169,7 +167,6 @@ onMounted(async () => {
         padding: 32rpx;
         border-radius: 24rpx;
         width: 100%;
-        height: 280rpx;
         margin-bottom: 40rpx;
         background-color: #f6f6f5;
 
@@ -199,12 +196,13 @@ onMounted(async () => {
           margin-bottom: 26rpx;
 
           &-img {
-            width: 36rpx;
-            height: 36rpx;
+            width: 40rpx;
+            height: 40rpx;
             margin-right: 26rpx;
           }
           
           &-desc {
+            flex: 1;
             font-size: 28rpx;
             color: rgba(0, 0, 0, 0.55);
           }
@@ -218,11 +216,12 @@ onMounted(async () => {
           &-img {
             width: 36rpx;
             height: 36rpx;
-            margin-right: 26rpx;
+            margin-right: 28rpx;
             border-radius: 50%;
           }
 
           &-desc {
+            flex: 1;
             font-size: 28rpx;
             color: rgba(0, 0, 0, 0.55);
           }

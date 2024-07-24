@@ -1,7 +1,7 @@
 <template>
   <scroll-view class="home-main-tab-scrollview" scroll-x="true" :class="{'fixed': props.isFixed }">
     <div class="home-main-tab">
-      <div class="home-main-tab-item" v-for="item, index in ['待拍摄', '待确认', '进行中','已完成','退款售后']" 
+      <div class="home-main-tab-item" v-for="item, index in ['待确认', '待拍摄', '进行中','已完成','退款售后']" 
            @click="handleClick(index)" :key="index">
         <span class="mb-[10rpx]">{{ item }}</span>
         <div class="svg-icon" v-if="active === index" />

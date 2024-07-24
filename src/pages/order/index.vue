@@ -66,7 +66,7 @@ import Schedule from '@/components/order/Schedule.vue'
 import { useTimeLine } from '@/hooks/useTimeLine'
 
 const weeks  = ['日', '一', '二', '三', '四', '五', '六']
-const isWeek = ref(false)
+const isWeek = ref(true)
 const loading = ref(false)
 const activeLeft = ref(0)
 
@@ -90,13 +90,20 @@ const handleWeekClick = (date: any, index: any) => {
 }
 
 const moveActive = (date?: any) => {
-  const day = dayjs(date ? date : '').day();
+  let day = ''
+  if(!date) {
+    day = dayjs().day()
+  } else {
+    day = dayjs(date).day()
+  }
   activeLeft.value = 0;
   loading.value = true;
   setTimeout(() => {
     activeLeft.value = day * 98 + 5;
   }, 200);
-  loading.value = false
+  setTimeout(() => {
+    loading.value = false
+  }, 500)
 }
 
 
@@ -303,6 +310,7 @@ onMounted(async () => {
               justify-content: center;
               padding: 28rpx 0;
               width: 99rpx;
+              height: 90rpx;
               box-sizing: border-box;
 
               &-before {
@@ -311,7 +319,7 @@ onMounted(async () => {
 
               &-dot {
                 position: absolute;
-                top: 90rpx;
+                top: 70rpx;
                 left: 45rpx;
                 width: 12rpx;
                 height: 12rpx;
@@ -319,7 +327,6 @@ onMounted(async () => {
                 border-radius: 50%;
 
                 &-red {
-                  top: 75rpx;
                   background-color: #ba2636;
                 }
               }

@@ -6,5 +6,4 @@ export const getUserOrders = async (data: any) => {
 
 export const getUserOrdersTimeLine = async (data: any) => {
   return await request.post('/member/p/order/timeline', data)
-
 }
