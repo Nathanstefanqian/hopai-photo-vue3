@@ -8,35 +8,33 @@
       <div class="overlay" v-if="loading">
         <up-loading-icon mode="semicircle" :show="loading"></up-loading-icon>
       </div>
-      <div class="flex" v-if="order.length">
-        <div class="schedule-main-time">
-          <div class="time" v-for="item, index in order" :key="index">
+      <div class="flex schedule-main-wrap" v-if="order.length">
+        <div class="line"></div>
+        <div class="schedule-main-item" v-for="item, index in order" :key="index">
+          <div class="time">
             <div class="time-start">{{ formatTime(item.appointmentStartTime) }}</div>
             <div class="time-divider"></div>
             <div class="time-end">{{ formatTime(item.appointmentEndTime) }}</div>
           </div>
-        </div>
-        <div class="schedule-main-divider"></div>
-        <div class="schedule-main-order">
-          <div class="order" v-for="item, index in order" :key="index">
+          <div class="order">
             <div class="order-title">
               <span>{{ item.spuDescribe }}</span>
               <span class="order-title-status">{{ getStatus(item.orderStatus) }}</span>
             </div>
             <div class="order-id">订单号：{{ item.id }}</div>
             <div class="order-location">
-              <image class="order-location-img" src="@/static/order/location.svg" />
+              <image class="order-location-img" :src=" netConfig.picURL + '/static/order/location.svg'" />
               <span class="order-location-desc">{{ item.location }}</span>
             </div>
             <div class="order-people">
-              <image class="order-people-img" :src="item.memberAvatar ? item.memberAvatar : '@/static/my/avatar.jpg' " mode="aspectFill" />
+              <image class="order-people-img" :src="item.memberAvatar ? item.memberAvatar : netConfig.picURL + '@/static/my/avatar.jpg' " mode="aspectFill" />
               <span class="order-people-desc">{{ item.memberName }} {{ item.memberPhone }}</span>
             </div>
           </div>
         </div>
       </div>
       <div v-else class="schedule-main-empty">
-        <image src="@/static/my/empty.svg" class="mb-[64rpx]" />
+        <image :src="netConfig.picURL + '/static/my/empty.svg'" class="mb-[64rpx]" />
         <span class="title">当天没有任务哦</span>
       </div>
     </div>
@@ -45,6 +43,7 @@
 
 <script setup lang="ts">
 import { getUserOrdersTimeLine } from '@/api/order/index'
+import { netConfig } from '@/config/net.config'
 import { orderVO } from '@/api/order/types'
 import { formatTime } from '@/utils/tools'
 import { getStatus } from '@/utils/tools'
@@ -113,7 +112,17 @@ onMounted(async () => {
 
   &-main {
     display: flex;
-
+    position: relative;
+    flex-direction: column;
+    .line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 137rpx;
+      width: 2rpx;
+      background: rgba(0, 0, 0, 0.12);
+    }
+    
     .blur {
       filter: blur(70rpx);
 
@@ -131,17 +140,18 @@ onMounted(async () => {
       justify-content: center;
       align-items: center;
     }
-    &-time {
+
+    &-wrap {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      width: 188rpx;
+
+    .schedule-main-item {
+      display: flex;
       .time {
         display: flex;
         flex-direction: column;
         align-items: center;
-        height: 320rpx;
-
+        width: 144rpx;
         &-divider {
           width: 2rpx;
           height: 16rpx;
@@ -149,26 +159,19 @@ onMounted(async () => {
           margin: 8rpx 0;
         }
       }
-    }
-
-    &-divider {
-      width: 2rpx;
-      background: rgba(0, 0, 0, 0.12);
-    }
-
-    &-order {
-      padding: 0 32rpx;
-      width: 100%;
 
       .order {
+        flex: 1;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
         padding: 32rpx;
         border-radius: 24rpx;
-        width: 100%;
+        margin-left: 32rpx;
         margin-bottom: 40rpx;
         background-color: #f6f6f5;
+        min-width: 520rpx;
+        margin-right: 32rpx;
 
         &-title {
           display: flex;
@@ -228,7 +231,11 @@ onMounted(async () => {
         }
 
       }
+
     }
+    }
+
+
   }
 }
 </style>

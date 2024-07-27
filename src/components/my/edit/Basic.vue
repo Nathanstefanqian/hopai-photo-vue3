@@ -4,7 +4,7 @@
       <div class="basic-card" v-if="user && user.appPhotographerInfoBaseVO">
         <div class="basic-card-item" @click="handleClickPic(0)">
           <span class="basic-card-item-title">头像</span>
-          <image class="basic-card-item-image" :src="user.avatar" mode="aspectFill"></image>
+          <image class="basic-card-item-image" :src="user.avatar || netConfig.picURL + '/static/my/avatar.jpg'" mode="aspectFill"></image>
         </div>
         <div class="basic-card-item" @click="openPopup('昵称', user.nickname, 'nickname')">
           <span class="basic-card-item-title">昵称</span>
@@ -14,9 +14,17 @@
           <span class="basic-card-item-title">性别</span>
           <span class="content">{{ user.sex == 1 ? '男' : '女' }}</span>
         </div>
-        <div class="basic-card-item" @click="openPopup('手机号', user.mobile, 'mobile')">
+        <!-- <div class="basic-card-item" @click="openPopup('手机号', user.mobile, 'mobile')">
           <span class="basic-card-item-title">手机号</span>
           <span class="content">{{ user.mobile }}</span>
+        </div> -->
+        <div class="basic-card-item" @click="openPopup('联系客户手机号', user.phone, 'phone')">
+          <span class="basic-card-item-title">联系客户手机号</span>
+          <span class="content">{{ user.phone }}</span>
+        </div>
+        <div class="basic-card-item" @click="handleLevel()">
+          <span class="basic-card-item-title">摄影师等级</span>
+          <span class="content">{{ user.levelName }}</span>
         </div>
         <div class="basic-card-item" @click="openPopup('生日', user.birthday, 'birthday')">
           <span class="basic-card-item-title">生日</span>
@@ -26,6 +34,10 @@
           <span class="basic-card-item-title">所在地</span>
           <span class="content">{{ user.areaName }}</span>
         </div>
+        <div class="basic-card-item" @click="openPopup('接单模式', user.appPhotographerInfoBaseVO.orderType, 'orderType')">
+          <span class="basic-card-item-title">接单模式</span>
+          <span class="content">{{ user.appPhotographerInfoBaseVO.orderType ? '全职' : '兼职' }}</span>
+        </div>
         <div class="basic-card-item" @click="openPopup('小红书号', user.appPhotographerInfoBaseVO.littleRedBookId, 'littleRedBookId')">
           <span class="basic-card-item-title">小红书号</span>
           <span class="content">{{ user.appPhotographerInfoBaseVO.littleRedBookId }}</span>
@@ -34,32 +46,40 @@
           <span class="basic-card-item-title">抖音号</span>
           <span class="content">{{ user.appPhotographerInfoBaseVO.douYinId }}</span>
         </div>
-        <div class="basic-card-item " @click="openPopup('简介', user.appPhotographerInfoBaseVO.introduction, 'introduction')">
+        <div class="basic-card-item no-border" @click="openPopup('简介', user.appPhotographerInfoBaseVO.introduction, 'introduction')">
           <span class="basic-card-item-title">简介</span>
-          <span class="content introduction">{{ user.appPhotographerInfoBaseVO.introduction }}</span>
+          <span class="content introduction">{{ user.appPhotographerInfoBaseVO.introduction || '暂无' }}</span>
         </div>
-        <div class="basic-card-item no-border">
+        <!-- <div class="basic-card-item no-border">
           <span class="basic-card-item-title">背景图片</span>
           <image class="basic-card-item-bgc" :src="user.appPhotographerInfoBaseVO.backgroundImageUrl" mode="aspectFill" @click="handleClickPic(1)"></image>
-        </div>
+        </div> -->
       </div>
     </up-skeleton>
   </div>
   <up-popup :show="show" @close="show = false" :round="10" closeable class="relative">
     <view class="popup">
       <div class="title">{{ popupTitle }}</div>
-      <div class="desc" v-if="currentField !=='sex' ">
-        <AreaPicker v-model="areaModel" v-if="currentField === 'area'" />
-        <Calendar v-model="popupContent" v-else-if="currentField === 'birthday'" />
-        <input v-model="popupContent" placeholder="请输入" v-else />
-      </div>
-      <div v-else>
+      <div v-if="currentField === 'sex'">
         <div class="desc-btn mb-[55rpx]" :class="{ 'active': popupContent == 1 }" @click="popupContent = 1">
           男
         </div>
         <div class="desc-btn" :class="{ 'active': popupContent == 2 }" @click="popupContent = 2">
           女
         </div>
+      </div>
+      <div v-else-if="currentField === 'orderType'">
+        <div class="desc-btn mb-[55rpx]" :class="{ 'active': popupContent }" @click="popupContent = true">
+          全职
+        </div>
+        <div class="desc-btn" :class="{ 'active': !popupContent }" @click="popupContent = false">
+          兼职
+        </div>
+      </div>
+      <div class="desc" v-else>
+        <AreaPicker v-model="areaModel" v-if="currentField === 'area'" />
+        <Calendar v-model="popupContent" v-else-if="currentField === 'birthday'" />
+        <input v-model="popupContent" placeholder="请输入" v-else />
       </div>
       <div class="btn-group">
         <button class="btn btn-accept" @click="updateInfo">确定</button>
@@ -88,14 +108,16 @@
   <img-crop 
         v-if="chooseAvatarUrl"
         :url="chooseAvatarUrl"
-        :width="1000"
-        :height="1000"
+        :width="200"
+        :height="200"
         @cancel="chooseAvatarUrl = ''"
         @success="updateAvatar"
     />
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs'
+import { netConfig } from '@/config/net.config'
 import { getUserInfo, updateBasicInfo } from '@/api/my/index';
 import AreaPicker from './AreaPicker.vue';
 import Calendar from './Calendar.vue'
@@ -118,6 +140,10 @@ const areaModel = ref({ areaId: null, areaName: '' });
 const { message } = useNotification()
 const progressList = ref<any>([])
 const active = ref()
+
+const handleLevel = () => {
+  message({ title: '联系客服评定等级哦' })
+}
 
 const updateAvatar = async (filePath: string) => {
   chooseAvatarUrl.value = ''
@@ -148,6 +174,7 @@ const getData = async () => {
   try {
     user.value = (await getUserInfo()).data;
     active.value = user.value.sex
+    if(user.value.birthday == null) user.value.birthday = dayjs().valueOf()
   } finally {
     loading.value = false;
   }
@@ -195,7 +222,7 @@ const updatePicture = async () => {
 }
 
 const updateInfo = async () => {
-  if(!popupContent.value) {
+  if(!popupContent.value && currentField.value !== 'orderType' && currentField.value !=='area') {
     message({"title": "该信息不能为空哦！"})
     return
   }
@@ -210,7 +237,11 @@ const updateInfo = async () => {
     } else {
       updateData = { [currentField.value]: popupContent.value, userId: user.value.appPhotographerInfoBaseVO.userId };
     }
-    await updateBasicInfo(updateData);
+    const res = await updateBasicInfo(updateData);
+    if(!res.data) {
+      message({ title: res.msg })
+      return
+    }
     await getData();
     message({ title: '更新成功' })
     show.value = false;

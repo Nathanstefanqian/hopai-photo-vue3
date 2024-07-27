@@ -1,6 +1,7 @@
 <template>
-  <div class="form">
-    <div class="form-item mt-[32rpx]">
+  <up-skeleton :loading="loading" :rows="6">
+    <div class="form">
+    <div class="form-item mt-[32rpx] !mb-[0rpx]">
       <div class="form-item-header">个人信息</div>
       <div class="form-item-content">
         <div class="form-item-content-input">
@@ -17,6 +18,7 @@
         </div>
       </div>
     </div>
+    <div class="form-item-footer !mb-[32rpx]">*电话是您与顾客联系的常用联系电话，与登录的手机号可以不相同</div>
     <div class="form-item mt-[32rpx]">
       <div class="form-item-header">我的设备</div>
       <div class="form-item-content">
@@ -52,22 +54,36 @@
       </div>
     </div>
     <div class="form-item mt-[32rpx]">
-      <div class="form-item-header">上传设备图片</div>
+      <div class="form-item-header form-item-header-flex">
+        <span>上传设备图片</span>
+        <span class="delete" @click="del = !del">删除</span>
+      </div>
       <div class="form-item-content">
-        <Photo />
+        <Photo @update:device="handleDeviceUpdate" :device.sync="formData.photoList" :del="del" />
       </div>
       <div class="form-item-footer">*您可以上传多张设备图片，详细完善的图片信息，可以帮助我们完成审核工作</div>
     </div>
   </div>
+  </up-skeleton>
+
   <div class="form-confirm">
-      <div class="btn">提交申请</div>
+    <div class="btn" @click="handleSubmit">提交申请</div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import Photo from './photo.vue'
-
+import { register } from '@/api/auth'
+import { getUserInfo } from '@/api/my'
+import { useRegistrationStore } from '@/pinia/register'
+import { useUserStore } from '@/pinia/user'
+import { useNotification} from '@/hooks/useNotification'
+const { clearUser } = useUserStore()
+const { message,modal } = useNotification()
+const registrationStore = useRegistrationStore()
+const del = ref(false)
+const id = ref(false)
+const loading = ref(false)
 const formData = ref({
   mobile: '',
   nickname: '',
@@ -77,10 +93,127 @@ const formData = ref({
   zoomLens: '',
   fixedFocalLengthLens: '',
   littleRedBookId: '',
-  douYinId: ''
+  douYinId: '',
+  photoList: []
 })
 
-const photoList = ref([])
+const handleDeviceUpdate = (device: any) => {
+  formData.value.photoList = device
+}
+
+
+const handleSubmit = async () => {
+  modal({ title: '确认提交吗', content: '请检查信息填写无误' }).then(async () => {
+    const validationResult = validateFormData(formData.value);
+
+if (validationResult.isValid) {
+  await registrationStore.updateFormData({
+    mobile: formData.value.mobile,
+    nickname: formData.value.nickname,
+    wechatId: formData.value.wechatId,
+    camera: formData.value.camera,
+    lightingEquipment: formData.value.lightingEquipment,
+    zoomLens: formData.value.zoomLens,
+    fixedFocalLengthLens: formData.value.fixedFocalLengthLens,
+    littleRedBookId: formData.value.littleRedBookId,
+    douYinId: formData.value.douYinId,
+    photoList: formData.value.photoList
+  }) // 先存储
+  await registrationStore.loadFromLocalStorage() // 再读
+  const temp = registrationStore.formData
+  // 组织为接口所需要的形式
+  const devicesPics = temp.photoList.map((item:any) => {
+    return item.picUrl
+  })
+  const data = {
+    phone: formData.value.mobile, // 从 formData 中提取手机号码
+    areaId: temp.area.areaId, // 保持地区信息不变
+    nickname: formData.value.nickname, // 从 formData 中提取昵称
+    appPhotographerInfoRegisterVO: {
+    littleRedBookId: formData.value.littleRedBookId, // 从 formData 中提取小红书ID
+    douYinId: formData.value.douYinId, // 从 formData 中提取抖音ID
+    wechatId: formData.value.wechatId, // 从 formData 中提取微信ID
+    hopaiAgreement: true, // 保持为 true
+    paymentAgreement: true, // 保持为 true
+    imageAgreement: true, // 保持为 true
+    camera: formData.value.camera, // 从 formData 中提取相机信息
+    lightingEquipment: formData.value.lightingEquipment, // 从 formData 中提取灯光设备信息
+    fixedFocalLengthLens: formData.value.fixedFocalLengthLens, // 从 formData 中提取定焦镜头信息
+    zoomLens: formData.value.zoomLens, // 从 formData 中提取变焦镜头信息
+    orderType: temp.orderType // 保持接单类型不变
+  },
+    devicesPics
+  }
+  const res = await register(data)
+  if(!res.data) {
+    message({ title: res.msg })
+    return
+  }
+    uni.showToast({
+      title: '提交成功',
+      icon: 'success'
+    })
+    clearUser() // 给你退出
+    setTimeout(() => {
+      uni.reLaunch({
+      url: '/pages/register/pending'
+    }) }, 2000)
+} else {
+  uni.showToast({
+    title: validationResult.errorMessage,
+    icon: 'none'
+  });
+}
+  })
+
+};
+
+// 验证函数
+const validateFormData = (data: any) => {
+  const errors: string[] = [];
+
+  // 检查每个字段是否为空
+  if (!data.nickname) errors.push('姓名');
+  if (!data.mobile) errors.push('电话');
+  if (!data.wechatId) errors.push('微信号');
+  if (!data.camera) errors.push('相机');
+  if (!data.lightingEquipment) errors.push('灯光信息');
+  if (!data.fixedFocalLengthLens) errors.push('定焦镜头');
+  if (!data.zoomLens) errors.push('变焦镜头');
+  if (!data.littleRedBookId) errors.push('小红书号');
+  if (!data.douYinId) errors.push('抖音号');
+  if (data.photoList.length === 0) errors.push('设备图片');
+
+  // 验证手机号格式
+  const phoneRegex = /^[1][3-9][0-9]{9}$/;
+  if (data.mobile && !phoneRegex.test(data.mobile)) errors.push('电话格式不正确');
+
+  return {
+    isValid: errors.length === 0,
+    errorMessage: errors.length > 0 ? `请填写以下信息: ${errors.join(', ')}` : ''
+  };
+};
+onLoad(async (e: any) => {
+  if(e.id) {  // 如果是重新来验证的
+    loading.value = true
+    const user = (await getUserInfo()).data
+    formData.value = {
+    mobile: user.mobile || '',
+    nickname: user.nickname || '',
+    wechatId: user.appPhotographerInfoBaseVO.wechatId || '',
+    camera: user.appPhotographerInfoBaseVO.camera || '',
+    lightingEquipment: user.appPhotographerInfoBaseVO.lightingEquipment || '',
+    zoomLens: user.appPhotographerInfoBaseVO.zoomLens || '',
+    fixedFocalLengthLens: user.appPhotographerInfoBaseVO.fixedFocalLengthLens || '',
+    littleRedBookId: user.appPhotographerInfoBaseVO.littleRedBookId || '',
+    douYinId: user.appPhotographerInfoBaseVO.douYinId || '',
+    photoList: formData.value.photoList
+    };
+    loading.value = false
+  }
+  id.value = e.id
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -100,6 +233,19 @@ const photoList = ref([])
     margin-bottom: 64rpx;
     &-header {
       padding: 0 0 16rpx 0;
+      &-flex {
+        display: flex;
+        justify-content: space-between;
+
+        .delete {
+          font-weight: 400;
+          font-size: 24rpx;
+          padding: 8rpx 16rpx;
+          color: #ba2636;
+          border-radius: 12rpx;
+          border: 0.66rpx solid #ba2636;
+        }
+      }
     }
     &-content {
       width: 100%;
@@ -120,7 +266,7 @@ const photoList = ref([])
         }
 
         .form-input {
-          font-size: 24rpx;
+          font-size: 28rpx;
         }
       }
     }

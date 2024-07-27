@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="album-photo-empty" v-else>
-          <image src="/static/my/empty-album.svg" />
+          <image :src="netConfig.picURL + '/static/my/empty-album.svg'" />
           <div class="title">快上传优秀的作品吧</div>
         </div>
       </up-skeleton>
@@ -63,6 +63,7 @@ import { useNotification } from '@/hooks/useNotification'
 import { useUserStore } from '@/pinia/user'
 const { getUserInfo } = useUserStore()
 const { message, modal } = useNotification()
+import { netConfig } from '@/config/net.config'
 const photo = ref<any>([])
 const loading = ref(false)
 const del = ref(false)

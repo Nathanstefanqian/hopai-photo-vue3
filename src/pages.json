@@ -1,16 +1,86 @@
 {
-  "pages": [    
+  "pages": [
     {
-    "path": "pages/order/index",
-    "style": {
-      "navigationBarTitleText": "订单",
-      "navigationStyle": "custom"
-    }
-  },
+      "path": "pages/home/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/home/form",
+      "style": {
+        "navigationBarTitleText": "无法接单"
+      }
+    },
+    {
+      "path": "pages/register/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/order/index",
+      "style": {
+        "navigationBarTitleText": "订单",
+        "navigationStyle": "custom"
+      }
+    },
     {
       "path": "pages/my/index",
       "style": {
         "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/register/form",
+      "style": {
+        "navigationBarTitleText": "申请成为摄影师"
+      }
+    },
+    {
+      "path": "pages/register/failure",
+      "style": {
+        "navigationBarTitleText": "审核不通过"
+      }
+    },
+
+    {
+      "path": "pages/home/success",
+      "style": {
+        "navigationBarTitleText": "退单成功"
+      }
+    },
+    {
+      "path": "pages/my/guide",
+      "style": {
+        "navigationBarTitleText": "成为摄影师"
+      }
+    },
+    {
+      "path": "components/my/edit/Money",
+      "style": {
+        "navigationBarTitleText": "佣金信息"
+      }
+    },
+    {
+      "path": "components/webview/index",
+      "style": {
+        "navigationBarTitleText": "和拍协议"
+      }
+    },
+
+    {
+      "path": "pages/auth/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "components/my/edit/Order",
+      "style": {
+        "navigationBarTitleText": "接单信息"
       }
     },
     {
@@ -20,30 +90,11 @@
       }
     },
     {
-      "path": "pages/register/failure",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/register/pending",
       "style": {
-        "navigationStyle": "custom"
+        "navigationBarTitleText": "审核中"
       }
     },
-    {
-      "path": "pages/register/form",
-      "style": {
-        "navigationBarTitleText": "申请成为摄影师"
-      }
-    },
-    {
-      "path": "pages/register/index",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-
     {
       "path": "pages/test/index",
       "style": {
@@ -57,12 +108,7 @@
         "navigationBarTitleText": "创建相册"
       }
     },
-    {
-      "path": "components/my/edit/Order",
-      "style": {
-        "navigationBarTitleText": "接单信息"
-      }
-    },
+
     {
       "path": "components/my/edit/Basic",
       "style": {
@@ -81,33 +127,12 @@
         "navigationBarTitleText": "设备信息"
       }
     },
-
-    {
-      "path": "pages/auth/index",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/home/index",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
     {
       "path": "components/my/EditAlbum",
       "style": {
         "navigationBarTitleText": "编辑相册"
       }
     },
-
-    {
-      "path": "components/my/edit/Money",
-      "style": {
-        "navigationBarTitleText": "佣金信息"
-      }
-    },
-
     {
       "path": "components/home/Container"
     },

@@ -8,7 +8,7 @@
         <div class="time-other">
           <div class="time-other-week">{{ "星期" + weeks[currentDay.day()] }}</div>
           <div class="time-other-year">
-            {{ currentYear }}
+            {{ currentDay.format('YYYY年M月') }}
           </div>
         </div>
       </div>
@@ -17,7 +17,7 @@
       <div class="calendar">
         <div class="calendar-header">
           <div class="calendar-header-year">
-            <div class="year">{{ currentDay.format('YYYY年') }}</div>
+            <div class="year">{{ currentYear }}</div>
             <div class="btn" @click="handleToggle">{{ isWeek ? '查看所有' : '查看本周' }}</div>
           </div>
           <div class="calendar-header-week">
@@ -73,7 +73,7 @@ const activeLeft = ref(0)
 const currentDate = dayjs().format('YYYY-MM-DD');
 const chooseDate = ref(currentDate)
 const currentDay = dayjs(currentDate)
-const currentYear = ref(dayjs().format('YYYY年'))
+const currentYear = ref(dayjs().format('YYYY年M月'))
 const currentMonth = dayjs().format('YYYY-MM');
 const monthData = useTimeLine('month').calendarData
 const { calendarData: weekData, refreshWeekData } = useTimeLine('week')
@@ -111,7 +111,7 @@ const handleDateClick = async (date: string) => {
   try {
     refreshWeekData(date)
     chooseDate.value = date
-    currentYear.value = dayjs(date).format('YYYY年');
+    currentYear.value = dayjs(date).format('YYYY年M月');
     isWeek.value = true
     moveActive(date)
   } catch (error) {

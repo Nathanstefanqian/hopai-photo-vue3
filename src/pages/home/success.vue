@@ -1,11 +1,10 @@
 <template>
   <div class="result relative">
     <div class="result-main">
-      <image class="result-main-img"  :src="netConfig.picURL + '/static/register/success.svg'" mode="widthFix" />
-      <div class="result-main-title">审核中</div>
+      <image class="result-main-img" :src=" netConfig.picURL + '/static/register/success.svg'" mode="widthFix" />
+      <div class="result-main-title">退单成功</div>
       <div class="result-main-subtitle">
-        <span>您已提交成功，工作人员将在1个工作日内</span>
-        <span>完成审核，我们将短信通知您！</span>
+        <span>您已退单成功，该订单将由其他摄影师接任</span>
       </div>
     </div>
   </div>
@@ -13,7 +12,6 @@
 
 <script setup lang="ts">
 import { netConfig } from '@/config/net.config'
-
 </script>
 
 <style lang="scss" scoped>

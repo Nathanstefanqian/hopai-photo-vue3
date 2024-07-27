@@ -195,7 +195,7 @@ onMounted(async () => {
         margin-bottom: 32rpx;
 
         .delete {
-        font-weight: 400;
+          font-weight: 400;
           font-size: 24rpx;
           padding: 8rpx 16rpx;
           color: #ba2636;

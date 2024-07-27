@@ -145,12 +145,12 @@ export const useTimeLine = (type: 'month' | 'week', chooseDay?: string) => {
   })
 
   // 重新生成周数据
-  const refreshWeekData = (date: string) => {
+  const refreshWeekData = (date?: string) => {
     const storedOrdersObj = uni.getStorageSync('storedOrders');
     if (storedOrdersObj) {
       storedOrders.value = objectToMap(storedOrdersObj);
     }
-    calendarData.value = getWeekData(date);
+    calendarData.value = getWeekData(date ? date : '');
     (calendarData.value as DayInfo[]).forEach(day => {
       if (day.date) {
         day.hasOrder = storedOrders.value.has(day.date);

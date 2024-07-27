@@ -27,7 +27,7 @@
         </div>
         <div class="card-info-item">
           <div class="card-info-item-title">客户：</div>
-          <div class="card-info-item-content">{{ item.memberName }}  {{ item.memberPhone }}</div>
+          <div class="card-info-item-content" @click="handleCopy(item.memberPhone)">{{ item.memberName }}  {{ item.memberPhone }} <span class="copy">点我复制</span></div>
         </div>
         <div class="card-info-item">
           <div class="card-info-item-title">地点：</div>
@@ -40,14 +40,14 @@
       </div>
       <div class="mb-[40rpx]"></div>
       <div class="card-op">
-        <span class="card-op-text" v-if="item.orderStatus == 1">无法接单？</span>
+        <span class="card-op-text" v-if="item.orderStatus == 1" @click="handleRefuse(item.id)">无法接单？</span>
         <div class="card-op-btn" @click="handleBtn(item.id, item.orderStatus)">
           {{ getStatusBtn(item.orderStatus) }}
         </div>
       </div>
     </div>
     <div class="container-empty" v-else>
-      <image src="@/static/my/empty.svg" />
+      <image :src="netConfig.picURL + '/static/my/empty.svg'" />
       <span class="title">暂无任务</span>
     </div>
   </div>
@@ -60,18 +60,32 @@ import { orderVO } from '@/api/order/types'
 import { formatTime, formatDateWeek, getStatus, activeStatus, getStatusBtn } from '@/utils/tools'
 import { useNotification } from '@/hooks/useNotification'
 import { useUserStore } from '@/pinia/user'
-const { isLoggedIn } = useUserStore()
+import * as AuthApi from '@/api/auth'
+import { netConfig } from '@/config/net.config'
+const { isLoggedIn, logout } = useUserStore()
 const { message, modal } = useNotification()
 const props = defineProps<{ active: number }>()
 const loading = ref(false)
 const order = ref<orderVO[]>([])
 
+const handleRefuse = (id: any) => {
+  uni.navigateTo({
+    url: `/pages/home/form?id=${id}`
+  })
+}
 
-const handleBtn = (id: any, status: any) => {
+const handleCopy = (number: any) => {
+  uni.setClipboardData({ data: number })
+
+}
+
+
+const handleBtn = async (id: any, status: any) => {
   if(status == 1) {
     modal({ title: '确认订单', content: '您将确认客户的拍摄订单,确认订单后请提前与客户确认拍摄任务' }).then(async () => {
     await updateOrderStatus({ orderId: id, status: 2 })
     await getData(activeStatus[props.active])
+    message({ title: '确认成功'})
   })
   } else if(status == 3) {
         modal({ title: '等待传图', content: '请前往摄影师PC端传图' }).then(async () => {
@@ -83,6 +97,22 @@ const handleBtn = (id: any, status: any) => {
         uni.setClipboardData({ data: 'https://photo.codegod.site'})
         // message({ title: '摄影师PC端网址已复制' })
     })
+  } else if(status == 2) {
+    message({ title: '点击上方扫码按钮进行扫码'})
+  } else if(status == 6) {
+    message({ title: '联系用户确认交付哦'})
+  } else if(status == 7){
+    message({ title: '联系用户进行评价哦'})
+  } else if(status == 100) {
+    message({ title: '该订单已经完成啦！'})
+  } else if(status == 20) {
+    message({ title: '等待退款中！'})
+  } else if(status == 30) {
+    message({ title: '该订单退款完成啦！'})
+  } else if(status == 10) {
+    message({ title: '该订单已经被关闭啦！'})
+  } else if(status ==4) {
+    message({ title: '等待客户选图中' })
   }
 }
 
@@ -98,7 +128,12 @@ const getData = async (status: any) => {
   if(!isLoggedIn) {
     modal({ title: '您还没登录哦!', content: '登录即可使用小程序功能' }).then(() => {
       uni.navigateTo({ url: '/pages/auth/index'})
-    })
+    }).catch(() => {})
+    return
+  }
+  const { registerStatus } = (await AuthApi.getUserInfo()).data
+  if(registerStatus < 3) { // 当没完成注册的用户误触回到桌面
+    logout(true)
     return
   }
   order.value = (await getUserOrders({ pageNo: 1, pageSize: 50, status })).data.list
@@ -110,6 +145,11 @@ onShow(async () => {
 </script>
 
 <style lang="scss" scoped>
+.copy {
+  font-size: 24rpx;
+  color: #ba2636;
+  margin-left: 12rpx;
+}
 .home-main-container {
   position: relative;
   min-height: calc(100vh - 660rpx);
@@ -207,6 +247,8 @@ onShow(async () => {
         font-size: 28rpx !important;
       }
       &-content {
+        display: flex;
+        align-items: center;
         flex: 1;
         font-size: 28rpx !important;
       }

@@ -49,6 +49,13 @@ const previewPhoto = (picUrl: string) => {
     current: picUrl
   })
 }
+// 定义 emit 事件
+const emit = defineEmits(['update:device']);
+// 更新 device 后触发事件
+const updateDevice = (newDevice: DeviceVO[]) => {
+  device.value = newDevice;
+  emit('update:device', newDevice);
+};
 
 const handleDelete = async (id: string) => {
   modal({ title: '即将删除', content: '删除后无法撤回噢' }).then(async () => {
@@ -93,12 +100,8 @@ const handleUpload = () => {
 const getData = async () => {
   loading.value = true
   try {
-    // await getStsToken()
-    // device.value = (await getDeviceList(userId)).data
-    // await Promise.all(device.value.map(async item => {
-    //   const url = item.picUrl.split('.com/')[1]
-    //   item.picUrl = await signatrueUrl(url)
-    // }))
+    device.value = (await getDeviceList(userId)).data;
+    updateDevice(device.value); // 触发事件
   } finally {
     loading.value = false
   }

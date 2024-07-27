@@ -1,17 +1,18 @@
 <template>
   <div class="result relative">
     <div class="result-main">
-      <image class="result-main-img" src="@/static/register/success.svg" mode="widthFix" />
+      <image class="result-main-img" :src="netConfig.picURL + '/static/register/success.svg'" mode="widthFix" />
       <div class="result-main-title">提交成功</div>
       <div class="result-main-subtitle">
         <span>您已提交成功，工作人员将在1个工作日内</span>
-        <span>完成审核,请耐心等待！</span>
+        <span>完成审核，我们将短信通知您！</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { netConfig } from '@/config/net.config'
 
 </script>
 

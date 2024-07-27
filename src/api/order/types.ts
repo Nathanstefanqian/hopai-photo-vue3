@@ -9,6 +9,7 @@ export type MonthData = {
 }
 
 export type orderVO = {
+  memberAvatar: string
   id: number
   memberId: number
   memberName: string

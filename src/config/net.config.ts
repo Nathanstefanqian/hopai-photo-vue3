@@ -15,4 +15,5 @@ export const netConfig = {
   invalidCode: -1,
   //无权限code
   noPermissionCode: -1,
+  picURL: 'https://upload.codegod.site'
 };

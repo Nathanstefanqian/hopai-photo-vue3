@@ -4,7 +4,6 @@ import request from '@/utils/request'
 export const getUserInfo = async () => {
   return await request.get('/member/photographer/get')
 }
-
 // 获取用户的设备列表
 export const getDeviceList = async (userId: any) => {
   return await request.get(`/member/user-devices-pic/list?userId=${userId}`)
@@ -91,3 +90,28 @@ export const deleteAlbum = async (id: any) => {
   return await request.delete(`/member/album/delete?id=${id}`)
 }
 
+
+// 摄影师开户
+export const subAppOpen = async (data: any) => {
+  return await request.post('/member/photographer/subAppOpen', data)
+}
+
+// 阿里云ocr
+export const getIdCardOcr = async (data: any) => {
+  return await request.post('/infra/ocr/idcard', data)
+}
+
+
+export const getBankCardOcr = async (data: any) => {
+  return await request.post('/infra/ocr/bankCard', data)
+}
+
+// 获取银行编码列表
+export const getListBankCode = async () => {
+  return await request.post('/member/photographer/listBankCode')
+}
+
+// 银行审核不通过时的不通过原因
+export const getAccountOpenFailureMsg = async () => {
+  return await request.get('/member/photographer/getAccountOpenFailureMsg')
+}

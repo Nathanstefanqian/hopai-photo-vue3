@@ -20,3 +20,13 @@ export const logOut = async () => {
 export const refreshToken = async (token: any) => {
   return await request.post('/member/auth/refresh-token')
 }
+
+// 摄影师注册
+export const register = async (data: any) => {
+  return await request.post('/member/photographer/register', data)
+}
+
+// 获取基础信息
+export const getUserInfo = async () => {
+  return await request.get('/member/user/get')
+}

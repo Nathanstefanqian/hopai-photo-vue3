@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <up-skeleton rows="3" :loading="loading">
     <div class="photo-layout">
       <scroll-view class="photo-scrollview" scroll-x="true">
@@ -29,9 +29,7 @@ import { getDeviceList, createDevicePic, deleteDevicePic } from '@/api/my/index'
 import { useNotification } from '@/hooks/useNotification'
 import { DeviceVO } from '@/api/my/types'
 import { useUserStore } from '@/pinia/user'
-import { useSts } from '@/hooks/useSts'
 import { useUpload } from '@/hooks/useUpload'
-const { getStsToken, signatrueUrl } = useSts()
 const { getConfig, uploadFile   } = useUpload(0)
 const userId = useUserStore().getUserInfo?.userId
 const device = ref<DeviceVO[]>([])
@@ -80,7 +78,7 @@ const handleUpload = () => {
             await createDevicePic({ userId, picUrl })
             await getData()
           })
-        );
+        )
       } finally {
         message({ title: '新增成功' })
         loading.value = false;
@@ -93,12 +91,7 @@ const handleUpload = () => {
 const getData = async () => {
   loading.value = true
   try {
-    await getStsToken()
     device.value = (await getDeviceList(userId)).data
-    await Promise.all(device.value.map(async item => {
-      const url = item.picUrl.split('.com/')[1]
-      item.picUrl = await signatrueUrl(url)
-    }))
   } finally {
     loading.value = false
   }
@@ -177,18 +170,5 @@ onMounted(async () => {
     height: 1rpx;
   }
 }
-</style> -->
-
-<template>
-  <div>
-
-  </div>
-</template>
-
-<script setup lang="ts">
-
-</script>
-
-<style scoped>
-
 </style>
+

@@ -39,6 +39,7 @@ export const useUserStore = defineStore('user', {
       this.userInfo = null;
       uni.removeStorageSync('token');
       uni.removeStorageSync('userInfo');
+      uni.clearStorage()
     },
     async login(params: LoginVO) {
       try {
@@ -54,13 +55,19 @@ export const useUserStore = defineStore('user', {
         console.error('登录失败', error);
       }
     },
-    async logout() {
+    async logout(id?: any) {
+      if(id) {
+        await AuthApi.logOut(); // 调用登出接口
+        this.clearUser();
+        uni.reLaunch({ url: "/pages/my/index" })
+        return
+      }
       modal({ title: '确认退出吗', content: '退出后要重新登录噢'}).then(async () => {
         await AuthApi.logOut(); // 调用登出接口
         this.clearUser();
         message({"title": "退出成功", "icon": "success"})
         uni.reLaunch({ url: "/pages/my/index" })
-      }).catch(() => message({ "title": "取消退出登录" }))
+      }).catch(() => {})
 
     },
     async refreshToken() {

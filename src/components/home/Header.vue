@@ -19,7 +19,6 @@ import { useNotification } from '@/hooks/useNotification';
 import { getUserOrdersTimeLine } from '@/api/order/index';
 import { getUserInfo } from '@/api/my/index'
 import { scanQrCode } from '@/api/home/index';
-
 const { message, modal } = useNotification();
 const total = ref(0)
 const pendingTotal = ref(0)

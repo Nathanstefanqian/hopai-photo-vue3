@@ -1,8 +1,8 @@
 <template>
   <div class="register relative">
     <div class="register-bgc">
-      <image class="shape" src="@/static/register/shape.svg" />
-      <image class="photographer" src="https://upload.codegod.site/photographer.png" mode="widthFix" />
+      <image class="shape" :src="netConfig.picURL + '/static/register/shape.svg'" />
+      <image class="photographer" :src="netConfig.picURL + '/static/register/photographer.png'" mode="widthFix" />
     </div>
     <div class="register-main">
       <div class="register-main-header">
@@ -11,68 +11,80 @@
       </div>
       <div class="register-main-form">
         <div class="register-main-form-verify">
-          <image src="@/static/register/verify.svg" class="verify-img" />
+          <image :src="netConfig.picURL + '/static/register/verify.svg'" class="verify-img" />
           <span class="mr-[16rpx]">认证摄影师</span>
           <span class="desc">官方派单，省时省心</span>
         </div>
         <div class="register-main-form-participate">
           <div class="btn-group">
-            <div class="btn" :class="{ 'btn-active': active }" @click="active = true">
+            <div class="btn" :class="{ 'btn-active': formData.orderType }" @click="formData.orderType = true">
               全职接单
-              <div class="btn-dot" v-if="active">
-                <image class="btn-dot-img" src="@/static/register/correct.svg" />
+              <div class="btn-dot" v-if="formData.orderType">
+                <image class="btn-dot-img" :src="netConfig.picURL +'/static/register/correct.svg'" />
               </div>
             </div>
-            <div class="btn" :class="{ 'btn-active': !active }" @click="active = false">兼职接单
-              <div class="btn-dot" v-if="!active">
-                <image class="btn-dot-img" src="@/static/register/correct.svg" />
+            <div class="btn" :class="{ 'btn-active': !formData.orderType }" @click="formData.orderType = false">兼职接单
+              <div class="btn-dot" v-if="!formData.orderType">
+                <image class="btn-dot-img" :src="netConfig.picURL +'/static/register/correct.svg'" />
               </div>
             </div>
           </div>
           <div class="area-input">
-            <AreaPicker />
+            <AreaPicker v-model="formData.area" />
           </div>
           <div class="checkbox-group">
-            <up-checkbox-group>
-              <up-checkbox activeColor="#ba2636" label="同意加入和拍约拍相关协议" />
-              <up-checkbox activeColor="#ba2636" label="同意加入和拍约拍支付协议、规则" />
-              <up-checkbox activeColor="#ba2636" label="同意加入和拍约拍图像AI协议、规则" />
+            <up-checkbox-group v-model="formData.agreement">
+              <up-checkbox activeColor="#ba2636" :name="1">
+                <template #label>
+                  同意加入<span class="text-color-[#264fba]" @click="handleProxy(1)">和拍摄影师合作协议</span>
+                </template>
+              </up-checkbox>
+              <up-checkbox activeColor="#ba2636" :name="2">
+                <template #label>
+                  同意加入<span class="text-color-[#264fba]" @click="handleProxy(2)">和拍约拍支付协议</span>
+                </template>
+              </up-checkbox>
+              <up-checkbox activeColor="#ba2636" :name="3">
+                <template #label>
+                  同意加入<span class="text-color-[#264fba]" @click="handleProxy(3)">和拍约拍图像AI协议</span>
+                </template>
+              </up-checkbox>
             </up-checkbox-group>
           </div>
           <div class="btn-confirm-layout">
-            <div class="btn-confirm">立即加入</div>
+            <div class="btn-confirm" @click="handleEnter">立即加入</div>
           </div>
         </div>
         <div class="register-main-form-why">
           <div class="register-main-form-why-header">
             <div class="arrow-group mr-[14rpx]">
-              <image class="arrow" src="@/static/register/arrow-left1.svg" />
-              <image class="arrow" src="@/static/register/arrow-left2.svg" />
+              <image class="arrow" :src="netConfig.picURL + '/static/register/arrow-left1.svg'" />
+              <image class="arrow" :src="netConfig.picURL + '/static/register/arrow-left2.svg'" />
             </div>
             <span>为什么加入和拍</span>
             <div class="arrow-group ml-[14rpx]">
-              <image class="arrow" src="@/static/register/arrow-right1.svg" />
-              <image class="arrow" src="@/static/register/arrow-right2.svg" />
+              <image class="arrow" :src="netConfig.picURL + '/static/register/arrow-right1.svg'" />
+              <image class="arrow" :src="netConfig.picURL + '/static/register/arrow-right2.svg'" />
             </div>
           </div>
           <div class="register-main-form-why-main">
             <div class="card">
               <div class="card-top">
-                <image class="card-icon !w-[49rpx] !h-[49rpx]" src="@/static/register/card-icon1.svg" />
+                <image class="card-icon !w-[49rpx] !h-[49rpx]" :src="netConfig.picURL + '/static/register/card-icon1.svg'" />
                 <span class="card-title">精准定位</span>
               </div>
               <div class="card-bottom">精准匹配符合风格的客源</div>
             </div>
             <div class="card">
               <div class="card-top">
-                <image class="card-icon" src="@/static/register/card-icon2.svg" />
+                <image class="card-icon" :src="netConfig.picURL + '/static/register/card-icon2.svg'" />
                 <span class="card-title">订单无忧</span>
               </div>
               <div class="card-bottom">官方派单，订单无忧</div>
             </div>
             <div class="card">
               <div class="card-top">
-                <image class="card-icon !w-[49rpx] !h-[49rpx] !mr-[4rpx]" src="@/static/register/card-icon3.svg" />
+                <image class="card-icon !w-[49rpx] !h-[49rpx] !mr-[4rpx]" :src="netConfig.picURL +'/static/register/card-icon3.svg'" />
                 <span class="card-title">权益保障</span>
               </div>
               <div class="card-bottom">正规约拍平台权益保障</div>
@@ -111,8 +123,58 @@
 </template>
 
 <script setup lang="ts">
+import { netConfig } from '@/config/net.config'
 import AreaPicker from '@/components/my/edit/AreaPicker.vue'
-const active = ref(false)
+import { useRegistrationStore } from '@/pinia/register'
+import { useNotification } from '@/hooks/useNotification'
+const { message, modal } = useNotification()
+const registrationStore = useRegistrationStore()
+
+const handleProxy = (type: any) => {
+  let url = ''
+  if(type == 1) {
+    url = 'https://mp.weixin.qq.com/s/wpiSRROqN74WlfwPnHKsBA'
+  }
+  else if(type == 2) {
+    url = 'https://mp.weixin.qq.com/s/c2Q0W0xwHpptN8JDuXWpoA'
+  }
+  else {
+    url = 'https://mp.weixin.qq.com/s/U1ArW3LCSq4u2CkI1PwUvw'
+  }
+  uni.navigateTo({
+    url: `/components/webview/index?url=`+ url
+  })
+}
+
+const formData = ref({
+  orderType: false,
+  agreement: [],
+  area: { areaId: '', areaName: '' }
+})
+
+const handleEnter = async () => {
+  if(formData.value.area.areaId == '') {
+    message({ title: '请先选择地区哦' })
+    return
+  }
+  if(formData.value.agreement.length !== 3) {
+    message({ title: '需要同意我们所有的协议才能加入平台哦' })
+    return
+  }
+  // 更新数据并保存到 localStorage
+  await registrationStore.updateFormData({
+  orderType: formData.value.orderType,
+  area: formData.value.area,
+  agreement: formData.value.agreement
+  })
+
+
+  uni.navigateTo({
+    url: '/pages/register/form'
+  })
+}
+
+
 </script>
 
 <style lang="scss" scoped>

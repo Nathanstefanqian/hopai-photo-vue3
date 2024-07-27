@@ -3,7 +3,7 @@
     <scroll-view class="my-main-basic-album-scrollview" scroll-x="true">
       <div class="my-main-basic-album">
         <div class="album" v-for="item,index in album" :key="index" scroll-y="true" v-if="album.length" @click="editAlbum(item.id)">
-          <image class="album-image" :src="item.picUrl || '/static/my/gf5.jpg'" mode="aspectFill" />
+          <image class="album-image" :src="item.picUrl || netConfig.picURL + '/static/my/gf5.jpg'" mode="aspectFill" />
           <div class="album-desc">
             <div class="title">{{ item.title }}</div>
             <div class="op">
@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="album-empty" v-else>
-          <image src="/static/my/empty.svg" />
+          <image :src="netConfig.picURL + '/static/my/empty.svg'" />
           <span class="title">什么也没有</span>
         </div>
       </div>
@@ -29,6 +29,7 @@ const album = ref<any>([])
 const { getUserInfo } = useUserStore()
 const userId = getUserInfo?.userId
 const loading = ref(false)
+import { netConfig } from '@/config/net.config'
 
 const editAlbum = (id: any) => {
   uni.navigateTo({
@@ -116,3 +117,5 @@ onShow(async () => {
   }
 }
 </style>
+
+

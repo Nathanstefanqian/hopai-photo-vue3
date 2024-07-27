@@ -1,12 +1,13 @@
 <template>
   <div class="auth w-100vw h-100vh relative">
     <div class="auth-main">
-      <image src="/static/auth/auth-login.svg"></image>
+      <image :src="netConfig.picURL + '/static/auth/auth-logo.png'" class="auth-main-img"></image>
+
       <div class="auth-main-btn" @click="handleAuthorize">微信授权用户信息</div>
       <div class="auth-main-check" :class="{ shake: shake }">
         <up-checkbox class="mr-[16rpx]" shape="circle" @change="proxy = !proxy" v-model="proxy" usedAlone  />
         <div class="text w-[485rpx]">
-          阅读并同意我们的<span class="blue">"服务协议与隐私条款"</span>以及<span class="blue">个人信息保护指引</span>
+          阅读并同意我们的<span class="blue" @click="handleProxy(0)">"服务协议与隐私条款"</span>以及<span class="blue" @click="handleProxy(1)">个人信息保护指引</span>
         </div>
       </div>
     </div>
@@ -25,9 +26,12 @@
 
 <script setup lang="ts">
 import { useNotification } from '@/hooks/useNotification';
+import { netConfig } from '@/config/net.config'
 import { useUserStore } from '@/pinia/user'
-const userStore = useUserStore()
-const { message } = useNotification()
+import { getUserInfo } from '@/api/auth/index'
+const userStore = useUserStore() 
+const { clearUser } = useUserStore()
+const { message, modal } = useNotification()
 const proxy = ref(false)
 const show = ref(false)
 const shake = ref(false)
@@ -44,6 +48,18 @@ const handleAuthorize = () => {
   }
 }
 
+const handleProxy = (type: any) => {
+  let url = ''
+  if(type) {
+    url  ='https://mp.weixin.qq.com/s/PhHS3sdbaF_aKfOPj6sZnA'
+  } else {
+    url = 'https://mp.weixin.qq.com/s/xtWxpJXcm25yieQo5A4zfQ'
+  }
+  uni.navigateTo({
+    url: `/components/webview/index?url=${url}`
+  })
+}
+
 
 const getUserPhoneNumber = async (e: any) => {
   if(!e.detail.code) {
@@ -52,8 +68,30 @@ const getUserPhoneNumber = async (e: any) => {
   } 
   const phoneCode = e.detail.code
   await userStore.login({ phoneCode, loginCode: loginCode.value, userType: 3 })
-  uni.reLaunch({ url: '/pages/home/index' })
-  message({title: '授权成功' })
+  const res = (await getUserInfo()).data
+  if(res.reviewMark && res.registerStatus == 1) { // 被打回
+    modal({ title: '审核不通过', content: '查看不通过的原因'}).then(() => {
+      uni.reLaunch({ url: '/pages/register/failure' })
+    })
+    return
+  }
+  if(res.registerStatus == 1) { // 需要注册
+    modal({ title: '账号未注册', content: '即将前往注册成为摄影师'}).then(() => {
+      uni.navigateTo({ url: '/pages/register/index' })
+    })
+  } else if(res.registerStatus == 2) { // 正在审核中
+    clearUser() // 给你退出
+    uni.reLaunch({ url: '/pages/register/pending' })
+  } else if(res.registerStatus == 3) { // 引导进一步的审核
+    modal({ title: '您的审核通过啦', content: '前往个人中心进一步完善信息'} ).then(() => {
+      uni.reLaunch({ url: '/pages/my/index' })
+    })
+  }
+  else { // 正常登录
+    uni.reLaunch({ url: '/pages/home/index' })
+    message({title: '授权成功' })
+  }
+
 }
 
 const getAppCode = async () => {
@@ -67,7 +105,6 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 @import '@/styles/animation.scss';
-
 .auth-popup {
   display: flex;
   flex-direction: column;
@@ -123,12 +160,17 @@ onMounted(async () => {
     position: absolute;
     top: 368rpx;
 
+    &-img {
+      width: 160rpx;
+      height: 160rpx;
+      border-radius: 32rpx;
+    }
     &-btn {
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      margin-top: 380rpx;
+      margin-top: 600rpx;
       width: 480rpx;
       height: 80rpx;
       border-radius: 12rpx;

@@ -1,7 +1,22 @@
+import { register } from './index';
 export interface LoginVO {
   phoneCode: string // wx.getPhoneNumber获得
   loginCode: any // wx.login方法获得
   userType: number // 3 摄影师
+}
+
+export interface appPhotographerOpenSubAppReqVO {
+  bankCardNumber: string;
+  bankCode: string;
+  idCard: string;
+  idCardAddress: string;
+  idCardBackUrl: string;
+  idCardEndDate: string;
+  idCardFrontUrl: string;
+  idCardName: string;
+  idCardStartDate: string;
+  regionCode: string | null;
+  userId: string;
 }
 
 export interface appPhotographerInfoBaseVO {
@@ -19,7 +34,10 @@ export interface appPhotographerInfoBaseVO {
   id: string
 }
 export interface UserVO {
+  registerStatus: number
+  phone: string
   appPhotographerInfoBaseVO: appPhotographerInfoBaseVO
+  appPhotographerOpenSubAppReqVO: appPhotographerOpenSubAppReqVO
   avgRate: number
   totalOrderAmount: number
   orderCount: number

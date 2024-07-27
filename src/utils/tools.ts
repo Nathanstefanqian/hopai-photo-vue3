@@ -128,5 +128,7 @@ export const getStatusBtn = (status: any) => {
       return '退款中'
     case 30:
       return '退款成功'
+    case 10:
+      return '订单已取消'
   }
 }

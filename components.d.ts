@@ -24,5 +24,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Schedule: typeof import('./src/components/order/Schedule.vue')['default']
     Tab: typeof import('./src/components/home/Tab.vue')['default']
+    Webview: typeof import('./src/components/webview/index.vue')['default']
   }
 }
