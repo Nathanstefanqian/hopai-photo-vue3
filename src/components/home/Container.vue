@@ -126,9 +126,10 @@ watch(() => props.active, async () => {
 
 const getData = async (status: any) => {
   if(!isLoggedIn) {
-    modal({ title: '您还没登录哦!', content: '登录即可使用小程序功能' }).then(() => {
-      uni.navigateTo({ url: '/pages/auth/index'})
-    }).catch(() => {})
+    // modal({ title: '您还没登录哦!', content: '登录即可使用小程序功能' }).then(() => {
+    //   uni.navigateTo({ url: '/pages/auth/index'})
+    // }).catch(() => {})
+    message({ title: '您还没登录噢！'})
     return
   }
   const { registerStatus } = (await AuthApi.getUserInfo()).data

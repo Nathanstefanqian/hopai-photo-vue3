@@ -9,7 +9,7 @@
         <image :src="user?.avatar || netConfig.picURL + '/static/my/avatar.jpg'" class="header-image" @click="previewAvatar" mode="aspectFill"></image>
         <div class="header-userinfo" @click="handleUserInfoClick">
           <div class="name">
-            <span class="title">{{ user?.nickname || '未登录' }}</span>
+            <span class="title">{{ isLoggedIn ? user?.nickname : '未登录' }}</span>
             <div class="tag" v-if="isLoggedIn">{{ user.levelName }}</div>
           </div>
           <div class="desc">{{ isLoggedIn ? user?.appPhotographerInfoBaseVO?.introduction || '点我完善简介信息' : '登录体验更多功能' }}</div>
@@ -59,6 +59,7 @@ import Tab from '@/components/my/Tab.vue'
 import Album from '@/components/my/Album.vue'
 import { getUserInfo, getAccountOpenFailureMsg } from '@/api/my/index'
 import { useUserStore } from '@/pinia/user'
+import { netConfig } from '@/config/net.config'
 import { useNotification } from '@/hooks/useNotification'
 import * as AuthApi from '@/api/auth'
 const user = ref<any>({})
@@ -109,9 +110,10 @@ const handleCreate = () => {
 
 const getData = async () => {
   if(!isLoggedIn) {
-    modal({ title: '您还没登录哦!', content: '登录即可使用小程序功能' }).then(() => {
-      uni.navigateTo({ url: '/pages/auth/index'})
-    }).catch(() => {})
+    // modal({ title: '您还没登录哦!', content: '登录即可使用小程序功能' }).then(() => {
+    //   uni.navigateTo({ url: '/pages/auth/index'})
+    // }).catch(() => {})
+    message({ title: '您还没登录噢'})
     return
   }
   const { registerStatus } = (await AuthApi.getUserInfo()).data

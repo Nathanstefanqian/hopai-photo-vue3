@@ -105,14 +105,24 @@
       </div>
     </view>
   </up-popup>
-  <img-crop 
+  <!-- <img-crop 
         v-if="chooseAvatarUrl"
         :url="chooseAvatarUrl"
         :width="200"
         :height="200"
         @cancel="chooseAvatarUrl = ''"
         @success="updateAvatar"
-    />
+    /> -->
+    <t-cropper
+    mode="ratio"
+    :imageUrl="chooseAvatarUrl"
+    :width="500"
+    :height="500"
+    :radius="0"
+    :delay="150"
+    @cancel="chooseAvatarUrl = ''"
+    @confirm="updateAvatar"
+  ></t-cropper>
 </template>
 
 <script setup lang="ts">
@@ -145,7 +155,8 @@ const handleLevel = () => {
   message({ title: '联系客服评定等级哦' })
 }
 
-const updateAvatar = async (filePath: string) => {
+const updateAvatar = async (filePath: any) => {
+  const path =  filePath.tempFilePath
   chooseAvatarUrl.value = ''
   loading.value = true;
   progressList.value = [0]
@@ -153,7 +164,7 @@ const updateAvatar = async (filePath: string) => {
   const { uploadFile, getConfig } = useUpload(0)
   try {
     await getConfig()
-    const picUrl = await uploadFile(filePath, progress => {
+    const picUrl = await uploadFile(path, progress => {
       progressList.value[0] = progress
     })
     progressShow.value = false
