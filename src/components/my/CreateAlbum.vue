@@ -35,6 +35,9 @@
   <div class="album-footer">
     <div class="album-footer-btn" @click="handleCreate">创建相册</div>
   </div>
+  <div class="album-footer-blank">
+
+  </div>
   <up-popup :show="progressShow"  mode="center" :round="10" >
     <view class="popup-progress">
       <div v-for="(progress,index) in progressList" :key="index">
@@ -91,7 +94,7 @@ const handleCreate = async () => {
     loading.value = false
     message({ title: '创建成功', icon: 'success' })
     setTimeout(() => {
-      uni.navigateBack()
+      uni.reLaunch({ url: '/pages/my/index' })
     }, 1000);
   }
 }
@@ -213,10 +216,14 @@ const previewPhoto = (picUrl: string) => {
     border-radius: 12rpx;
   }
 }
+.album-footer-blank {
+  height: 160rpx;
+  width: 100vw;
+}
 .album {
   box-sizing: border-box;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f6f6f6;
   padding: 32rpx;
 
@@ -239,6 +246,8 @@ const previewPhoto = (picUrl: string) => {
   }
 
   &-photo {
+  background-color: #f6f6f6;
+    
     &-header {
       display: flex;
       justify-content: space-between;
@@ -253,7 +262,7 @@ const previewPhoto = (picUrl: string) => {
         &-add {
           padding: 8rpx 16rpx;
           border-radius: 12rpx;
-          border: 0.66rpx solid #ba2636;
+          border: 2rpx solid #ba2636;
           color: #ba2636;
           font-size: 24rpx;
         }
@@ -265,6 +274,7 @@ const previewPhoto = (picUrl: string) => {
       width: 100%;
       margin-top: 36rpx;
       flex-wrap: wrap;
+      background-color: #f6f6f6;
 
       &-item {
         position: relative;

@@ -270,7 +270,7 @@ onShow(async () => {
     &-btn {
       color: #BA2636;
       border-radius: 12rpx;
-      border: 0.66rpx solid #BA2636;
+      border: 2rpx solid #BA2636;
       padding: 10rpx 24rpx;
       font-size: 28rpx;
 

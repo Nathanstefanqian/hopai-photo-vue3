@@ -200,7 +200,7 @@ onMounted(async () => {
           padding: 8rpx 16rpx;
           color: #ba2636;
           border-radius: 12rpx;
-          border: 0.66rpx solid #ba2636;
+          border: 2rpx solid #ba2636;
         }
       }
     }

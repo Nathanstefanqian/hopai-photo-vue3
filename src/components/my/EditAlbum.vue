@@ -113,7 +113,7 @@ const deleteAlbumHandler = async () => {
     message({ title: '删除成功' })
     setTimeout(() => {
       loading.value = false
-      uni.navigateBack()
+      uni.reLaunch({ url: '/pages/my/index' })
     }, 2000);
   })
 }
@@ -140,6 +140,9 @@ const setCover = (photoId: any) => {
     message({ title: '设置成功' })
     await getData()
     loading.value = false
+    setTimeout(() => {
+      uni.reLaunch({ url: '/pages/my/index' })
+    }, 2000);
   })
 }
 
@@ -155,6 +158,9 @@ const updateTitle = async () => {
   message({ title: '更新成功' })
   loading.value = false
   show.value = false
+  setTimeout(() => {
+      uni.reLaunch({ url: '/pages/my/index' })
+    }, 2000);
 }
 
 const previewPhoto = (picUrl: string) => {
@@ -230,7 +236,7 @@ onLoad(async options => {
 .album {
   box-sizing: border-box;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f6f6f6;
   padding: 32rpx;
 
@@ -247,7 +253,7 @@ onLoad(async options => {
         font-weight: 400;
         padding: 8rpx 16rpx;
         border-radius: 12rpx;
-        border: 0.66rpx solid #ba2636;
+        border: 2rpx solid #ba2636;
         color: #ba2636;
         font-size: 24rpx;
       }
@@ -275,7 +281,7 @@ onLoad(async options => {
         &-add {
           padding: 8rpx 16rpx;
           border-radius: 12rpx;
-          border: 0.66rpx solid #ba2636;
+          border: 2rpx solid #ba2636;
           color: #ba2636;
           font-size: 24rpx;
         }

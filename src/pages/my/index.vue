@@ -5,7 +5,7 @@
       <div class="my-main-alert">
         <up-alert center v-if="!hasVerify" type = "error" description = "你的账号暂时无法接单，请遵守和拍规则。"></up-alert>
       </div>
-      <div class="my-main-header">
+      <div class="my-main-header" @click="handleLogin">
         <image :src="user?.avatar || netConfig.picURL + '/static/my/avatar.jpg'" class="header-image" @click="previewAvatar" mode="aspectFill"></image>
         <div class="header-userinfo" @click="handleUserInfoClick">
           <div class="name">
@@ -43,7 +43,10 @@
       <div class="my-main-album">
         <div class="my-main-album-header">
           <div class="header-title">我的代表作</div>
-          <div class="header-create" @click="handleCreate">+ 创建</div>
+          <div class="header-right">
+            <div class="header-create mr-20rpx" @click="handleAll">全部</div>
+            <div class="header-create" @click="handleCreate" v-if="user.nickname != 'nathanqian33' && isLoggedIn">+ 创建</div>
+          </div>
         </div>
         <div class="my-main-album-main">
           <Album />
@@ -72,10 +75,24 @@ const login = () => {
   uni.navigateTo({ url: '/pages/auth/index'})
 }
 
+const handleLogin = () => {
+  if(!isLoggedIn) {
+    uni.navigateTo({ url: '/pages/auth/index'})
+  }
+}
+
 const handleUserInfoClick = () => {
   if(isLoggedIn) {
     uni.navigateTo({
     url: '/components/my/edit/Basic'
+  })
+  }
+}
+
+const handleAll = () => {
+  if(isLoggedIn) {
+    uni.navigateTo({
+    url: '/components/my/AllAlbum'
   })
   }
 }
@@ -315,16 +332,21 @@ onShow(async () => {
         align-items: center;
         margin-bottom: 24rpx;
 
+        .header-right {
+          display: flex;
+        }
+
         .header-title {
           font-size: 36rpx;
           font-weight: 300;
         }
+
         .header-create {
           font-size: 24rpx;
           padding: 8rpx 16rpx;
           color: #ba2636;
           border-radius: 12rpx;
-          border: 0.66rpx solid #ba2636;
+          border: 2rpx solid #ba2636;
         }
       }
     }

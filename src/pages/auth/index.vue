@@ -2,8 +2,8 @@
   <div class="auth w-100vw h-100vh relative">
     <div class="auth-main">
       <image :src="netConfig.picURL + '/static/auth/auth-logo.png'" class="auth-main-img"></image>
-
-      <div class="auth-main-btn" @click="handleAuthorize">微信授权用户信息</div>
+      <div class="auth-main-btn" @click="handleAuthorize">手机号快捷登录</div>
+      <div class="auth-main-btn auth-main-btn2" @click="goBack">不登录，返回</div>
       <div class="auth-main-check" :class="{ shake: shake }">
         <up-checkbox class="mr-[16rpx]" shape="circle" @change="proxy = !proxy" v-model="proxy" usedAlone  />
         <div class="text w-[485rpx]">
@@ -14,8 +14,8 @@
   </div>
   <up-popup :show="show" @close="show = false" :round="10" closeable class="relative">
     <view class="auth-popup">
-        <div class="title">HOPAI申请绑定您的手机号码</div>
-        <div class="desc">您的手机号码将用于登录和注册，不会有其他用途，请您允许授权</div>
+        <div class="title">HOPAI申请手机快捷登录</div>
+        <div class="desc">您的手机号码将用于登录和注册，不会有其他用途，请您允许手机快捷登录</div>
         <div class="btn-group">
           <button class="btn btn-cancel" @click="show = false">取消</button>
           <button class="btn btn-accept" open-type="getPhoneNumber" @getphonenumber="getUserPhoneNumber">确定</button>
@@ -46,6 +46,10 @@ const handleAuthorize = () => {
   } else {
     show.value = true
   }
+}
+
+const goBack = () => {
+  uni.navigateBack({ delta: 1 })
 }
 
 const handleProxy = (type: any) => {
@@ -160,6 +164,14 @@ onMounted(async () => {
     position: absolute;
     top: 368rpx;
 
+    &-back {
+      position: absolute;
+      top: 90rpx;
+      left: 20rpx;
+      width: 40rpx;
+      height: 40rpx;
+    }
+
     &-img {
       width: 160rpx;
       height: 160rpx;
@@ -170,16 +182,21 @@ onMounted(async () => {
       align-items: center;
       justify-content: center;
       color: #fff;
-      margin-top: 600rpx;
+      margin-top: 550rpx;
       width: 480rpx;
       height: 80rpx;
       border-radius: 12rpx;
       background-color: #ba2636;
     }
+    &-btn2 {
+      margin-top: 40rpx !important;
+      background-color: #000;
+      color: #fff;
+    }
 
     &-check {
       display: flex;
-      margin-top: 192rpx;
+      margin-top: 150rpx;
       margin-bottom: 80rpx;
       font-size: 28rpx;
       color: rgba(40, 40, 40, 0.50);

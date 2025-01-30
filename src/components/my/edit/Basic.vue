@@ -1,6 +1,7 @@
 <template>
-  <div class="basic w-100vw ">
-    <up-skeleton rows="6" :loading="loading">
+  <div class="basic w-100vw">
+    <div class="basic-layout">
+      <up-skeleton rows="6" :loading="loading">
       <div class="basic-card" v-if="user && user.appPhotographerInfoBaseVO">
         <div class="basic-card-item" @click="handleClickPic(0)">
           <span class="basic-card-item-title">头像</span>
@@ -56,6 +57,7 @@
         </div> -->
       </div>
     </up-skeleton>
+    </div>
   </div>
   <up-popup :show="show" @close="show = false" :round="10" closeable class="relative">
     <view class="popup">
@@ -105,24 +107,8 @@
       </div>
     </view>
   </up-popup>
-  <!-- <img-crop 
-        v-if="chooseAvatarUrl"
-        :url="chooseAvatarUrl"
-        :width="200"
-        :height="200"
-        @cancel="chooseAvatarUrl = ''"
-        @success="updateAvatar"
-    /> -->
-    <t-cropper
-    mode="ratio"
-    :imageUrl="chooseAvatarUrl"
-    :width="500"
-    :height="500"
-    :radius="0"
-    :delay="150"
-    @cancel="chooseAvatarUrl = ''"
-    @confirm="updateAvatar"
-  ></t-cropper>
+  <l-clipper v-if="cropperShow" :image-url="chooseAvatarUrl" :scale-ratio="4"  @success="updateAvatar" @cancel="cropperShow = false" :is-show-photo-btn="false" confirm-bg-color="#ba2636" />
+  <!-- scale-ratio用来控制清晰度 -->
 </template>
 
 <script setup lang="ts">
@@ -136,9 +122,11 @@ import { formatDate, validatePhoneNumber } from '@/utils/tools';
 import { useNotification } from '@/hooks/useNotification'
 import { useUpload } from '@/hooks/useUpload'
 
+
 const chooseAvatarUrl = ref('')
 const user = ref<UserVO>({} as UserVO);
 const loading = ref(false);
+const cropperShow = ref(false);
 const show = ref(false);
 const picShow = ref(false)
 const progressShow = ref(false)
@@ -156,7 +144,8 @@ const handleLevel = () => {
 }
 
 const updateAvatar = async (filePath: any) => {
-  const path =  filePath.tempFilePath
+  console.log('123', filePath)
+  const path =  filePath.url
   chooseAvatarUrl.value = ''
   loading.value = true;
   progressList.value = [0]
@@ -177,6 +166,7 @@ const updateAvatar = async (filePath: any) => {
     await getData()
     loading.value = false
     progressShow.value= false
+    cropperShow.value = false
   }
 }
 
@@ -228,6 +218,7 @@ const updatePicture = async () => {
       picShow.value = false
       const tempFilePaths:any = res.tempFilePaths;
       chooseAvatarUrl.value = tempFilePaths[0]
+      cropperShow.value = true
     }
   })
 }
@@ -272,10 +263,10 @@ onMounted(async () => {
   padding: 32rpx;
   box-sizing: border-box;
   min-height: 100vh;
+
   &-card {
     box-sizing: border-box;
     width: 100%;
-    // min-height: 1100rpx; /* 可选：限制卡片的最大宽度 */
     background-color: #fff;
     padding: 32rpx;
     border-radius: 24rpx;

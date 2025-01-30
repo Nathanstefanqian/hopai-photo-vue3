@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="form-item-footer !mb-[32rpx]">*电话是您与顾客联系的常用联系电话，与登录的手机号可以不相同</div>
-    <div class="form-item mt-[32rpx]">
+    <div class="form-item mt-[32rpx] !mb-[0rpx]">
       <div class="form-item-header">我的设备</div>
       <div class="form-item-content">
         <div class="form-item-content-input">
@@ -40,7 +40,8 @@
         </div>
       </div>
     </div>
-    <div class="form-item mt-[32rpx]">
+    <div class="form-item-footer !mb-[32rpx]">*如果没有则填 “无”，多个设备使用”;“隔开</div>
+    <div class="form-item mt-[32rpx] !mb-[0rpx]">
       <div class="form-item-header">我的作品</div>
       <div class="form-item-content">
         <div class="form-item-content-input">
@@ -53,6 +54,7 @@
         </div>
       </div>
     </div>
+    <div class="form-item-footer !mb-[32rpx]">*我们将基于您的作品和设备信息，评定摄影师等级</div>
     <div class="form-item mt-[32rpx]">
       <div class="form-item-header form-item-header-flex">
         <span>上传设备图片</span>
@@ -243,7 +245,7 @@ onLoad(async (e: any) => {
           padding: 8rpx 16rpx;
           color: #ba2636;
           border-radius: 12rpx;
-          border: 0.66rpx solid #ba2636;
+          border: 2rpx solid #ba2636;
         }
       }
     }

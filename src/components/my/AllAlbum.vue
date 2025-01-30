@@ -1,25 +1,22 @@
 <template>
-  <up-skeleton :rows="3" :loading="loading">
-    <scroll-view class="my-main-basic-album-scrollview" scroll-x="true">
-      <div class="my-main-basic-album">
-        <div class="album" v-for="item,index in album" :key="index" scroll-y="true" v-if="album.length" @click="editAlbum(item.id)">
-          <image class="album-image" :src="item.picUrl || netConfig.picURL + '/static/my/gf5.jpg'" mode="aspectFill" />
-          <div class="album-desc">
-            <div class="title">{{ item.title }}</div>
-            <div class="op">
-              <span class="number">{{ item.photoNum }}</span>
-              <span class="edit">编辑</span>
-            </div>
+  <div class="allalbum">
+    <div class="my-main-basic-album">
+      <div class="album" v-for="item,index in album" :key="index" scroll-y="true" v-if="album.length" @click="editAlbum(item.id)">
+        <image class="album-image" :src="item.picUrl || netConfig.picURL + '/static/my/gf5.jpg'" mode="aspectFill" />
+        <div class="album-desc">
+          <div class="title">{{ item.title }}</div>
+          <div class="op">
+            <span class="number">{{ item.photoNum }}</span>
+            <span class="edit">编辑</span>
           </div>
         </div>
-        <div class="album-empty" v-else>
-          <image :src="netConfig.picURL + '/static/my/empty.svg'" />
-          <span class="title">什么也没有</span>
-        </div>
       </div>
-    </scroll-view>
-  </up-skeleton>
-
+      <div class="album-empty" v-else>
+        <image :src="netConfig.picURL + '/static/my/empty.svg'" />
+        <span class="title">什么也没有</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -48,20 +45,25 @@ const getData = async () => {
     loading.value = false
   }
 }
-onLoad(async () => {
+onShow(async () => {
   await getData()
 })
-
 </script>
 
-<style lang="scss" scoped>
-.my-main-basic-album-scrollview {
-  width: 100%;
-  white-space: nowrap;
+<style scoped lang="scss">
+.allalbum {
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #f6f6f6;
+  padding: 32rpx;
+  box-sizing: border-box;
 }
 .my-main-basic-album {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
   .album {
     box-sizing: border-box;
     display: flex;
@@ -71,7 +73,7 @@ onLoad(async () => {
     height: 564rpx;
     padding: 24rpx;
     background-color: #fff;
-    margin-right: 24rpx;
+    margin-bottom: 36rpx;
 
     &-image {
       width: 272rpx;
@@ -117,5 +119,3 @@ onLoad(async () => {
   }
 }
 </style>
-
-

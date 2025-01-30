@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Album: typeof import('./src/components/my/Album.vue')['default']
+    AllAlbum: typeof import('./src/components/my/AllAlbum.vue')['default']
     AreaPicker: typeof import('./src/components/my/edit/AreaPicker.vue')['default']
     Basic: typeof import('./src/components/my/edit/Basic.vue')['default']
     Calendar: typeof import('./src/components/my/edit/Calendar.vue')['default']

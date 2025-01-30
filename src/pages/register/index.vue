@@ -275,7 +275,7 @@ const handleEnter = async () => {
             height: 80rpx;
             padding: 14rpx 24rpx;
             border-radius: 12rpx;
-            border: 0.66rpx solid rgba(0, 0, 0, 0.30);
+            border: 2rpx solid rgba(0, 0, 0, 0.30);
             background: rgba(0, 0, 0, 0.06);
             font-weight: 200;
             font-size: 28rpx;
@@ -283,7 +283,7 @@ const handleEnter = async () => {
             &-active {
               background-color: #f6e5e6;
               color: #ba2636;
-              border: 0.66rpx solid #BA2636;
+              border: 2rpx solid #BA2636;
             }
 
             &-dot {
@@ -312,7 +312,7 @@ const handleEnter = async () => {
           border-radius: 12rpx;
           box-sizing: border-box;
           padding-left: 32rpx;
-          border: 0.66rpx solid rgba(0, 0, 0, 0.30);
+          border: 2rpx solid rgba(0, 0, 0, 0.30);
           width: 100%;
           height: 80rpx;
           margin-bottom: 24rpx;
@@ -366,7 +366,7 @@ const handleEnter = async () => {
             width: 192rpx;
             height: 172rpx;
             border-radius: 16rpx;
-            border: 0.66rpx solid #BB2737;
+            border: 2rpx solid #BB2737;
             &-top {
               display: flex;
               align-items: center;

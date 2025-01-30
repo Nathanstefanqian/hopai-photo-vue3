@@ -155,7 +155,7 @@ onMounted(async () => {
         .btn-add {
           color: #ba2636;
           border-radius: 12rpx;
-          border: 0.66rpx solid #BA2636;
+          border: 2rpx solid #BA2636;
           padding: 8rpx 16rpx;
           font-size: 24rpx;
         }
@@ -210,7 +210,7 @@ onMounted(async () => {
         .btn-add {
           color: #ba2636;
           border-radius: 12rpx;
-          border: 0.66rpx solid #BA2636;
+          border: 2rpx solid #BA2636;
           padding: 8rpx 16rpx;
           font-size: 24rpx;
         }
