@@ -245,7 +245,7 @@ onMounted(async () => {
       margin-bottom: 64rpx;
 
       &-header {
-        font-weight: 200;
+        font-weight: 400 !important;
         margin-bottom: 16rpx;
       }
 
@@ -262,7 +262,7 @@ onMounted(async () => {
           align-items: center;
           margin-bottom: 48rpx;
           .title {
-            font-weight: 200;
+            font-weight: 400 !important;
           }
 
           .desc {
@@ -283,7 +283,7 @@ onMounted(async () => {
 
     &-upload {
       &-header {
-        font-weight: 200;
+        font-weight: 400 !important;
         margin-bottom: 16rpx;
       }
 

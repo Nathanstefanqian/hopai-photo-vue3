@@ -229,7 +229,7 @@ onLoad(async (e: any) => {
   min-height: 100vh;
   box-sizing: border-box;
   background-color: #f6f6f6;
-  font-weight: 200;
+  font-weight: 400 !important;
   &-item {
     width: 100%;
     margin-bottom: 64rpx;

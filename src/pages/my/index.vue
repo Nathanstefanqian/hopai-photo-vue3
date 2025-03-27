@@ -247,7 +247,7 @@ onShow(async () => {
       margin-bottom: 35rpx;
       &-header {
         font-size: 36rpx;
-        font-weight: 300;
+        font-weight: 400;
         margin-bottom: 24rpx;
       }
 
@@ -338,7 +338,7 @@ onShow(async () => {
 
         .header-title {
           font-size: 36rpx;
-          font-weight: 300;
+          font-weight: 400;
         }
 
         .header-create {
@@ -354,7 +354,7 @@ onShow(async () => {
     &-logout {
       padding: 80rpx 0;
       display: flex;
-      font-weight: 200;
+      font-weight: 400 !important;
       color: rgba(0, 0, 0, 0.55);
       justify-content: center;
     }

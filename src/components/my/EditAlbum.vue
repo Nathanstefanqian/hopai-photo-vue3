@@ -242,7 +242,7 @@ onLoad(async options => {
 
   &-name {
     margin-bottom: 66rpx;
-    font-weight: 200;
+    font-weight: 400 !important;
 
     &-header {
       display: flex;
@@ -273,7 +273,7 @@ onLoad(async options => {
       margin-top: 32rpx;
 
       .title {
-        font-weight: 200;
+        font-weight: 400 !important;
       }
       .btn {
         display: flex;

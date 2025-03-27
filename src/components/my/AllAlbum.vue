@@ -2,7 +2,7 @@
   <div class="allalbum">
     <div class="my-main-basic-album">
       <div class="album" v-for="item,index in album" :key="index" scroll-y="true" v-if="album.length" @click="editAlbum(item.id)">
-        <image class="album-image" :src="item.picUrl || netConfig.picURL + '/static/my/gf5.jpg'" mode="aspectFill" />
+        <image class="album-image" :src="item.picUrl" mode="aspectFill" />
         <div class="album-desc">
           <div class="title">{{ item.title }}</div>
           <div class="op">

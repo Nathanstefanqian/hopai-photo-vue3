@@ -229,7 +229,7 @@ const previewPhoto = (picUrl: string) => {
 
   &-name {
     margin-bottom: 66rpx;
-    font-weight: 200;
+    font-weight: 400 !important;
 
     &-header {
       margin-bottom: 32rpx;
@@ -254,7 +254,7 @@ const previewPhoto = (picUrl: string) => {
       margin-top: 32rpx;
 
       .title {
-        font-weight: 200;
+        font-weight: 400 !important;
       }
       .btn {
         display: flex;

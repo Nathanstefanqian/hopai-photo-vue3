@@ -16,7 +16,7 @@
       </div>
       <div class="form-item-content">
         <div class="selector">
-          <input placeholder="具体描述原因" v-model="reason" class="text-color-[#000]" />
+          <textarea placeholder="具体描述原因" v-model="reason" class="text-color-[#000] w-full min-h-[120rpx] resize-none" />
         </div>
       </div>
     </div>

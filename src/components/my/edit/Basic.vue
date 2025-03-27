@@ -287,7 +287,7 @@ onMounted(async () => {
       }
 
       &-title {
-        font-weight: 200;
+        font-weight: 400 !important;
       }
 
       &-bgc {

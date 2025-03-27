@@ -21,23 +21,23 @@ import Tab from '@/components/home/Tab.vue'
 
 
 const isFixed = ref(false)
-const query = uni.createSelectorQuery();
+// const query = uni.createSelectorQuery();
 const active = ref(0)
 
-const calculateBorderRadius = () => {
-  query.select('.home-main').boundingClientRect((rect) => {
-    if (rect.top < -100) {
-      isFixed.value = true
-    }
-    else {
-      isFixed.value = false
-    }
-  }).exec();
-}
+// const calculateBorderRadius = () => {
+//   query.select('.home-main').boundingClientRect((rect) => {
+//     if (rect.top < -100) {
+//       isFixed.value = true
+//     }
+//     else {
+//       isFixed.value = false
+//     }
+//   }).exec();
+// }
 
-onPageScroll(() => {
-  calculateBorderRadius()
-})
+// onPageScroll(() => {
+//   calculateBorderRadius()
+// })
 
 
 onShow(() => {

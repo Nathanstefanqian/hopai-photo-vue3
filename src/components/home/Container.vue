@@ -231,7 +231,7 @@ onShow(async () => {
       border-radius: 8rpx;
       background: rgba(249, 233, 132, 0.90);
       font-size: 28rpx;
-      font-weight: 200;
+      font-weight: 400 !important;
     }
   }
 

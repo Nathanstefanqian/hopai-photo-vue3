@@ -178,7 +178,7 @@ onMounted(async () => {
           justify-content: space-between;
           align-items: center;
           margin-bottom: 10rpx;
-          font-weight: 200;
+          font-weight: 400 !important;
 
           &-status {
             color: #ba2636;
@@ -188,7 +188,7 @@ onMounted(async () => {
         }
 
         &-id {
-          font-weight: 200;
+          font-weight: 400 !important;
           margin-bottom: 32rpx;
           font-size: 28rpx;
         }

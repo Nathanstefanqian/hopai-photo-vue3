@@ -162,7 +162,7 @@ onMounted(async () => {
       margin-bottom: 64rpx;
       &-header {
         font-size: 32rpx;
-        font-weight: 200;
+        font-weight: 400 !important;
         margin-bottom: 32rpx;
       }
 
@@ -172,7 +172,7 @@ onMounted(async () => {
         padding: 48rpx 32rpx;
 
         .item {
-          font-weight: 200;
+          font-weight: 400 !important;
           display: flex;
           flex-direction: row;
           justify-content: space-between;
@@ -191,7 +191,7 @@ onMounted(async () => {
       &-header {
         display: flex;
         justify-content: space-between;
-        font-weight: 200;
+        font-weight: 400 !important;
         margin-bottom: 32rpx;
 
         .delete {

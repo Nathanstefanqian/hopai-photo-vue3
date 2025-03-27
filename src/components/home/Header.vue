@@ -38,7 +38,7 @@ const fetchWeekData = async () => {
     res.map(item => {
       total.value += item.orders.length
       item.orders.map(order => {
-        if(order.orderStatus == 2) {
+        if(order.orderStatus == 1) {
           pendingTotal.value += 1
         }
       })
@@ -92,6 +92,9 @@ onMounted(() => {
 
       &-font {
         font-size: 28rpx;
+        .name {
+          color: #FFD700;
+        }
       }
     }
 

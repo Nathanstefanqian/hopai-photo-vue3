@@ -59,9 +59,11 @@ onLoad(async () => {
   width: 100%;
   white-space: nowrap;
 }
+
 .my-main-basic-album {
   display: flex;
   flex-direction: row;
+
   .album {
     box-sizing: border-box;
     display: flex;

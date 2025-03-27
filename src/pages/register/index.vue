@@ -209,7 +209,7 @@ const handleEnter = async () => {
       margin-left: 64rpx;
       margin-bottom: 56rpx;
       .title {
-        font-weight: 200;
+        font-weight: 400 !important;
         font-size: 56rpx;
         margin-bottom: 24rpx;
       }
@@ -277,7 +277,7 @@ const handleEnter = async () => {
             border-radius: 12rpx;
             border: 2rpx solid rgba(0, 0, 0, 0.30);
             background: rgba(0, 0, 0, 0.06);
-            font-weight: 200;
+            font-weight: 400 !important;
             font-size: 28rpx;
 
             &-active {

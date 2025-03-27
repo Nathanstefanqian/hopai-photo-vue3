@@ -149,7 +149,7 @@ onMounted(async () => {
 
         .title {
           font-size: 32rpx;
-          font-weight: 200;
+          font-weight: 400 !important;
         }
 
         .btn-add {
@@ -171,7 +171,7 @@ onMounted(async () => {
           border-radius: 12rpx;
           margin-bottom: 32rpx;
           .content {
-            font-weight: 200;
+            font-weight: 400 !important;
             font-size: 28rpx;
           }
           .delete {
@@ -204,7 +204,7 @@ onMounted(async () => {
         
         .title {
           font-size: 32rpx;
-          font-weight: 200;
+          font-weight: 400 !important;
         }
 
         .btn-add {
@@ -289,7 +289,7 @@ onMounted(async () => {
 
 ::v-deep .u-checkbox text {
   font-size: 28rpx !important;
-  font-weight: 200 !important;
+  font-weight: 400 !important !important;
 }
 @font-face {
   font-family: 'Abel';

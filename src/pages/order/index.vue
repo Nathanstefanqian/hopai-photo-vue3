@@ -181,7 +181,7 @@ onMounted(async () => {
         }
 
         .time-other {
-          font-weight: 200;
+          font-weight: 400 !important;
           display: flex;
           flex-direction: column;
           color: #bcc1cd;
@@ -217,7 +217,7 @@ onMounted(async () => {
           margin-top: 60rpx;
           .year {
             font-size: 40rpx;
-            font-weight: 200;
+            font-weight: 400 !important;
             margin-left: 16rpx;
           }
           .btn {
@@ -297,7 +297,7 @@ onMounted(async () => {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 200;
+            font-weight: 400 !important;
           }
 
           &-main {
