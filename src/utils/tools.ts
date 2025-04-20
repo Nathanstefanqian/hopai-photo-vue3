@@ -73,7 +73,16 @@ export const formatTime = (inputDate: any) => {
   return formattedTime
 }
 
-export const getStatus = (statusCode: any) => {
+export const getStatus = (statusCode: any, appointmentStartTime?: any) => {
+  // 如果是待确认状态且有预约开始时间，检查是否超时
+  if (statusCode === 1 && appointmentStartTime) {
+    const now = dayjs();
+    const startTime = dayjs(appointmentStartTime);
+    if (now.isAfter(startTime)) {
+      return '接单超时';
+    }
+  }
+
   switch (statusCode) {
     case 0:
       return '待支付'
@@ -95,6 +104,8 @@ export const getStatus = (statusCode: any) => {
       return '已完成'
     case 10:
       return '订单已取消'
+    case 11:
+      return '订单已超时'
     case 20:
       return '退款中'
     case 30:
@@ -106,18 +117,32 @@ export const getStatus = (statusCode: any) => {
 
 export const activeStatus =  [[1], [2], [3,4,5,6,7], [100, 10], [30, 20]]
 
-export const getStatusBtn = (status: any) => {
+export const maskPhone = (phone: string) => {
+  if (!phone) return '';
+  return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+}
+
+export const getStatusBtn = (status: any, appointmentStartTime?: any) => {
+  // 如果是待确认状态且有预约开始时间，检查是否超时
+  if (status === 1 && appointmentStartTime) {
+    const now = dayjs();
+    const startTime = dayjs(appointmentStartTime);
+    if (now.isAfter(startTime)) {
+      return '订单已超时';
+    }
+  }
+
   switch(status) {
     case 1:
       return '确认接单'
     case 2:
-      return '去扫码'
+      return '核销券码'
     case 3:
-      return '去传图'
+      return '上传底图'
     case 4:
-      return '等待客户选图'
+      return '顾客选图'
     case 5:
-      return '去修图'
+      return '上传精修图'
     case 6:
       return '等待客户确认'
     case 7:

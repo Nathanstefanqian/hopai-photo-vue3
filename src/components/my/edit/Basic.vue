@@ -81,7 +81,8 @@
       <div class="desc" v-else>
         <AreaPicker v-model="areaModel" v-if="currentField === 'area'" />
         <Calendar v-model="popupContent" v-else-if="currentField === 'birthday'" />
-        <input v-model="popupContent" placeholder="请输入" v-else />
+        <textarea v-model="popupContent" placeholder="请输入" v-else-if="currentField === 'introduction'" :adjust-position="true" cursor-spacing="100" autofocus focus cursor-position="-1" />
+        <input v-model="popupContent" placeholder="请输入" v-else :adjust-position="true" cursor-spacing="100"  />
       </div>
       <div class="btn-group">
         <button class="btn btn-accept" @click="updateInfo">确定</button>
@@ -114,7 +115,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import { netConfig } from '@/config/net.config'
-import { getUserInfo, updateBasicInfo } from '@/api/my/index';
+import { getUserInfo, updateBasicInfo } from '@/api/my/index';1358
 import AreaPicker from './AreaPicker.vue';
 import Calendar from './Calendar.vue'
 import { UserVO } from '@/api/auth/types';
@@ -261,6 +262,7 @@ onMounted(async () => {
 .basic {
   background-color: #f6f6f6;
   padding: 32rpx;
+  padding-bottom: 100rpx !important;
   box-sizing: border-box;
   min-height: 100vh;
 
@@ -331,7 +333,6 @@ onMounted(async () => {
     padding: 32rpx 32rpx;
     border-radius: 32rpx;
     color: rgba(40, 40, 40, 0.5);
-    word-wrap: break-word;
   }
 
 

@@ -19,6 +19,8 @@ import { useNotification } from '@/hooks/useNotification';
 import { getUserOrdersTimeLine } from '@/api/order/index';
 import { getUserInfo } from '@/api/my/index'
 import { scanQrCode } from '@/api/home/index';
+import { activeStatus } from '@/utils/tools';
+const props = defineProps<{ active: number }>();
 const { message, modal } = useNotification();
 const total = ref(0)
 const pendingTotal = ref(0)
@@ -48,13 +50,17 @@ const fetchWeekData = async () => {
   }
 };
 
+const getData = async () => {
+  await fetchWeekData();
+};
+
 // Function to handle QR code scan
 const scan = async () => {
   uni.scanCode({
     success: async res => {
       modal({ title: '确认扫码', content: '您正在扫码，请确认订单无误' }).then(async () => {
         await scanQrCode({ code: res.result });
-        await getData(activeStatus[props.active]);
+        await getData();
       });
     }
   });

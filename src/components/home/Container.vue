@@ -8,10 +8,10 @@
         <div class="card-header-createtime">
           {{ formatDateWeek(item.appointmentEndTime) }}
         </div>
-        <div class="card-header-status">{{ getStatus(item.orderStatus) }}</div>
+        <div class="card-header-status">{{ getStatus(item.orderStatus, item.appointmentStartTime) }}</div>
       </div>
       <div class="card-time flex-sb">
-        <div class="card-time-detail">{{  formatTime(item.appointmentStartTime) }}</div>
+        <div class="card-time-detail">{{ formatTime(item.appointmentStartTime) }}</div>
         <div class="card-time-divider"></div>
         <div class="card-time-detail">{{ formatTime(item.appointmentEndTime) }}</div>
       </div>
@@ -23,11 +23,14 @@
       <div class="card-info">
         <div class="card-info-item">
           <div class="card-info-item-title">订单号：</div>
-          <div class="card-info-item-content">{{ item.id }}</div>
+          <div class="card-info-item-content" @click="handleCopyId(item.id)">
+            {{ item.id }}
+            <span class="copy">复制</span>
+          </div>
         </div>
         <div class="card-info-item">
           <div class="card-info-item-title">客户：</div>
-          <div class="card-info-item-content" @click="handleCopy(item.memberPhone)">{{ item.memberName }}  {{ item.memberPhone }} <span class="copy">点我复制</span></div>
+          <div class="card-info-item-content" @click="handleCopy(item.memberPhone, item.id)">{{ item.memberName }}  {{ maskPhone(item.memberPhone) }} <span class="copy">拨打电话</span></div>
         </div>
         <div class="card-info-item">
           <div class="card-info-item-title">地点：</div>
@@ -41,12 +44,13 @@
       <div class="mb-[40rpx]"></div>
       <div class="card-op">
         <span class="card-op-text" v-if="item.orderStatus == 1" @click="handleRefuse(item.id)">无法接单？</span>
-        <div class="card-op-btn" @click="handleBtn(item.id, item.orderStatus)">
-          {{ getStatusBtn(item.orderStatus) }}
+        <div class="card-op-btn" :class="{'disabled': item.orderStatus === 1 && dayjs().isAfter(dayjs(item.appointmentStartTime))}" @click="handleBtn(item.id, item.orderStatus)">
+          {{ getStatusBtn(item.orderStatus, item.appointmentStartTime) }}
         </div>
       </div>
     </div>
-    <div class="container-empty" v-else>
+    
+    <div class="container-empty" v-else-if="!order.length && !loading">
       <image :src="netConfig.picURL + '/static/my/empty.svg'" />
       <span class="title">暂无任务</span>
     </div>
@@ -56,15 +60,18 @@
 
 <script setup lang="ts">
 import { getUserOrders, updateOrderStatus, scanQrCode } from '@/api/home/index'
+import { getTmpPhone } from '@/api/order/index'
 import { orderVO } from '@/api/order/types'
-import { formatTime, formatDateWeek, getStatus, activeStatus, getStatusBtn } from '@/utils/tools'
+import { formatTime, formatDateWeek, getStatus, activeStatus, getStatusBtn, maskPhone } from '@/utils/tools'
 import { useNotification } from '@/hooks/useNotification'
 import { useUserStore } from '@/pinia/user'
 import * as AuthApi from '@/api/auth'
 import { netConfig } from '@/config/net.config'
+import dayjs from 'dayjs'
 const { isLoggedIn, logout } = useUserStore()
 const { message, modal } = useNotification()
 const props = defineProps<{ active: number }>()
+const emit = defineEmits<{ (e: 'update:active', value: number): void }>()
 const loading = ref(false)
 const order = ref<orderVO[]>([])
 
@@ -74,31 +81,59 @@ const handleRefuse = (id: any) => {
   })
 }
 
-const handleCopy = (number: any) => {
-  uni.setClipboardData({ data: number })
-
+const handleCopy = async (number: any, id: any) => {
+  try {
+    const { data } = await getTmpPhone(id)
+    uni.makePhoneCall({
+      phoneNumber: data,
+      fail: () => {
+        message({ title: '拨打电话失败' })
+      }
+    })
+  } catch (error) {
+    message({ title: '获取临时电话失败' })
+  }
 }
 
 
 const handleBtn = async (id: any, status: any) => {
   if(status == 1) {
-    modal({ title: '确认订单', content: '您将确认客户的拍摄订单,确认订单后请提前与客户确认拍摄任务' }).then(async () => {
-    await updateOrderStatus({ orderId: id, status: 2 })
-    await getData(activeStatus[props.active])
-    message({ title: '确认成功'})
+    modal({ title: '确认订单', content: '确认订单后,请及时与顾客电话沟通拍摄任务' }).then(async () => {
+      await updateOrderStatus({ orderId: id, status: 2 })
+      emit('update:active', props.active + 1)
+      await getData(activeStatus[props.active])
+      message({ title: '确认成功'})
   })
   } else if(status == 3) {
-        modal({ title: '等待传图', content: '请前往摄影师PC端传图' }).then(async () => {
-          uni.setClipboardData({ data: 'https://photo.codegod.site'})
-          // message({ title: '摄影师PC端网址已复制' })
-      })
+        modal({ 
+          title: '上传底图', 
+          content: '摄影师传图端网址 https://photographer.hopai.cn',
+          cancelText: '返回',
+          confirmText: '复制网址'
+        }).then(async () => {
+          uni.setClipboardData({ 
+            data: 'https://photographer.hopai.cn',
+            success: () => {
+              message({ title: '已复制' })
+            }
+          })
+        })
   } else if(status == 5) {
-      modal({ title: '等待修图', content: '请前往摄影师PC端上传精修图' }).then(async () => {
-        uni.setClipboardData({ data: 'https://photo.codegod.site'})
-        // message({ title: '摄影师PC端网址已复制' })
-    })
-  } else if(status == 2) {
-    message({ title: '点击上方扫码按钮进行扫码'})
+      modal({ title: '等待修图', content: '请前往摄影师PC端上传精修图 https://photographer.hopai.cn' }).then(async () => {
+        uni.setClipboardData({ data: 'https://photographer.hopai.cn'})
+        message({ title: '摄影师PC端网址已复制' })
+      })
+    } else if(status == 2) {
+        uni.scanCode({
+          success: async res => {
+            modal({ title: '开始拍摄', content: '拍摄完成后, 请及时上传底图' }).then(async () => {
+              await scanQrCode({ code: res.result });
+              message({ title: '核劵成功'})
+              emit('update:active', props.active + 1)
+              await getData(activeStatus[props.active + 1])
+            });
+          }
+        });
   } else if(status == 6) {
     message({ title: '联系用户确认交付哦'})
   } else if(status == 7){
@@ -117,11 +152,8 @@ const handleBtn = async (id: any, status: any) => {
 }
 
 watch(() => props.active, async () => {
-  loading.value = true
   await getData(activeStatus[props.active])
-  setTimeout(() => {
-    loading.value = false
-  }, 200)
+  emit('update:active', props.active)
 })
 
 const getData = async (status: any) => {
@@ -137,12 +169,24 @@ const getData = async (status: any) => {
     logout(true)
     return
   }
+  order.value = []
+  loading.value = true
   order.value = (await getUserOrders({ pageNo: 1, pageSize: 50, status })).data.list
+  loading.value = false
 }
 
-onShow(async () => {
+onLoad(async () => {
   await getData(activeStatus[0])
 })
+
+const handleCopyId = (id: any) => {
+  uni.setClipboardData({
+    data: id,
+    success: () => {
+      message({ title: '订单号已复制' })
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -161,7 +205,7 @@ onShow(async () => {
     width: 100%;
     height: 100%;
     background: rgba(255, 255, 255, 0.5); 
-    backdrop-filter: blur(5px); 
+    // backdrop-filter: blur(5px); 
     display: flex; /* 居中加载指示器 */
     justify-content: center;
     align-items: center;
@@ -198,7 +242,7 @@ onShow(async () => {
     }
 
     &-status {
-      font-size: 28rpx;
+      font-size: 32rpx;
       color: #ba2636;
     }
   }
@@ -260,6 +304,12 @@ onShow(async () => {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    .disabled {
+      border-color: #ccc;
+      color: #666;
+      pointer-events: none;
+    }
 
     &-text {
       color: rgba(40, 40, 40, 0.50);

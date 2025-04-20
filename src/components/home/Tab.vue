@@ -34,8 +34,9 @@ const handleClick = (index: number) => {
   left: 0rpx;
   width: calc(100vw - 64rpx) !important;
   padding-top: 116rpx !important;
-  backdrop-filter: blur(30px); /* 背景模糊 */
-  transition: all ease 0.5s;
+  // backdrop-filter: blur(30px); /* 背景模糊 */
+  // transition: all ease 0.5s;
+  background-color: #fff;
   padding: 0 32rpx;
 }
 

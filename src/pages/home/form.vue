@@ -16,7 +16,8 @@
       </div>
       <div class="form-item-content">
         <div class="selector">
-          <textarea placeholder="具体描述原因" v-model="reason" class="text-color-[#000] w-full min-h-[120rpx] resize-none" />
+          <textarea placeholder="具体描述原因" v-model="reason" maxlength="200" class="text-color-[#000] w-full resize-none" />
+          <div class="word-count">{{ reason.length }}/200</div>
         </div>
       </div>
     </div>
@@ -42,7 +43,7 @@ const confirm = (e: any) => {
 const type = ref(false)
 const reason = ref('')
 const handleSubmit = async () => {
-  modal({ title: '确认提交吗', content: '提交后该订单将被其他摄影师接手'}).then(async () => {
+  modal({ title: '确认取消吗', content: '是否确认取消该约拍订单'}).then(async () => {
     if(!type.value) {
       message({ title: '请选择无法接单的原因 '})
       return
@@ -81,44 +82,76 @@ onLoad((e: any) => {
   &-item {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    margin-bottom: 60rpx;
+    margin-bottom: 48rpx;
+    padding: 32rpx;
+    background-color: #fff;
+    border-radius: 16rpx;
 
     &-header {
-      margin-bottom: 20rpx;
+      font-size: 32rpx;
+      font-weight: 500;
+      margin-bottom: 24rpx;
+
+      .text-color-\[\#ba2636\] {
+        margin-right: 4rpx;
+      }
     }
 
     &-content {
       width: 100%;
+      padding: 20rpx;
+      font-size: 28rpx;
+      color: #282828;
+      border: 1rpx solid rgba(0, 0, 0, 0.10);
       border-radius: 12rpx;
       box-sizing: border-box;
-      border: 0.3rpx solid rgba(0, 0, 0, 0.30);
-      padding: 32rpx;
+
       .selector {
+        position: relative;
+        color: #282828;
+        font-size: 28rpx;
+
+        textarea {
+          width: 100%;
+          height: 300rpx;
+          font-size: 28rpx;
+          color: #282828;
+          padding-bottom: 40rpx;
+          &::placeholder {
+            color: rgba(40, 40, 40, 0.30);
+          }
+        }
+
+        .word-count {
+          position: absolute;
+          right: 20rpx;
+          bottom: 10rpx;
+          font-size: 24rpx;
+          color: #999;
+        }
       }
     }
   }
 }
+
 .form-footer {
   position: fixed;
-  bottom: 0;
   left: 0;
-  width: 100vw;
+  bottom: 0;
+  width: 100%;
+  padding: 32rpx;
   background-color: #fff;
-  height: 180rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-sizing: border-box;
 
   .btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 300rpx;
-    height: 80rpx;
-    background-color: #ba2636;
+    width: 100%;
+    height: 88rpx;
+    line-height: 88rpx;
+    text-align: center;
+    background-color: #000;
     color: #fff;
-    border-radius: 16rpx;
+    border-radius: 12rpx;
+    font-size: 32rpx;
   }
 }
 </style>

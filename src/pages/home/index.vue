@@ -4,11 +4,19 @@
     <div class="home-ball-two"></div>
     <div class="home-ball-one"></div>
     <div class="home-header">
-      <Header />
+      <Header :active="active" />
     </div>
     <view class="home-main" ref="homeMain">
-      <Tab :isFixed="isFixed" v-model="active" />
-      <Container :active="active" />
+      <up-sticky offset-top="0">
+        <div class="home-tab">
+          <up-tabs :list="tabList" v-model:current="active" @change="handleChange" lineColor="#ba2636" :activeStyle="{
+            color: '#ba2636',
+            fontWeight: 'bold',
+            transform: 'scale(1.05)'
+          }" />
+        </div>
+      </up-sticky>
+      <Container ref="container" :active="active" />
       <div class="blank w-100vw h-[1rpx]"></div>
     </view>
   </div>
@@ -17,12 +25,22 @@
 <script setup lang="ts">
 import Container from '@/components/home/Container.vue'
 import Header from '@/components/home/Header.vue'
-import Tab from '@/components/home/Tab.vue'
+import { activeStatus } from '@/utils/tools'
 
-
+const handleChange = (e: any) => {
+  active.value = e.index
+}
+const tabList = [
+  { name: '待确认' },
+  { name: '待拍摄' },
+  { name: '进行中' },
+  { name: '已结束' },
+  { name: '退款售后' }
+]
 const isFixed = ref(false)
 // const query = uni.createSelectorQuery();
 const active = ref(0)
+const container = ref()
 
 // const calculateBorderRadius = () => {
 //   query.select('.home-main').boundingClientRect((rect) => {
@@ -39,9 +57,18 @@ const active = ref(0)
 //   calculateBorderRadius()
 // })
 
-
 onShow(() => {
 
+})
+
+onPullDownRefresh(async () => {
+  // try {
+  //   await getData(activeStatus[active.value])
+  //   uni.stopPullDownRefresh()
+  // } catch (error) {
+  //   uni.stopPullDownRefresh()
+  // }
+  active.value = 0
 })
 </script>
 
@@ -85,6 +112,11 @@ onShow(() => {
     padding: 0 32rpx;
     border-radius: 48rpx 48rpx 0 0;
     background-color: #f6f6f6;
+    position: relative;
+  }
+
+  &-tab {
+    padding: 32rpx 0;
   }
 }
 </style>

@@ -28,7 +28,7 @@
             </div>
             <div class="order-people">
               <image class="order-people-img" :src="item.memberAvatar ? item.memberAvatar : netConfig.picURL + '@/static/my/avatar.jpg' " mode="aspectFill" />
-              <span class="order-people-desc">{{ item.memberName }} {{ item.memberPhone }}</span>
+              <span class="order-people-desc">{{ item.memberName }} {{ maskPhone(item.memberPhone) }}</span>
             </div>
           </div>
         </div>
@@ -45,8 +45,7 @@
 import { getUserOrdersTimeLine } from '@/api/order/index'
 import { netConfig } from '@/config/net.config'
 import { orderVO } from '@/api/order/types'
-import { formatTime } from '@/utils/tools'
-import { getStatus } from '@/utils/tools'
+import { formatTime, getStatus, maskPhone } from '@/utils/tools'
 import dayjs from 'dayjs';
 
 const props = defineProps<{
