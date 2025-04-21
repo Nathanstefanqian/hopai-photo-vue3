@@ -26,15 +26,12 @@
         "navigationStyle": "custom"
       }
     },
-
-
     {
       "path": "pages/home/form",
       "style": {
         "navigationBarTitleText": "无法接单"
       }
     },
-
     {
       "path": "pages/order/index",
       "style": {
@@ -78,14 +75,24 @@
         "navigationBarTitleText": "和拍协议"
       }
     },
-
     {
       "path": "pages/auth/index",
       "style": {
         "navigationStyle": "custom"
       }
     },
-
+    {
+      "path": "components/my/edit/Customer",
+      "style": {
+        "navigationBarTitleText": "联系客服"
+      }
+    },
+    {
+      "path": "components/my/edit/CustomerDetail",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
     {
       "path": "components/my/edit/Order",
       "style": {

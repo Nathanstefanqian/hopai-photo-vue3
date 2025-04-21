@@ -45,6 +45,12 @@ const tabList = ref([
     src: netConfig.picURL + '/static/my/tab-money.svg',
     url: '/components/my/edit/Money'
   },
+  {
+    name: '联系客服',
+    edit: '去联系',
+    src:  netConfig.picURL + '/static/my/tab-basic.svg',
+    url: '/components/my/edit/Customer'
+  }
 ])
 const handleNavigate = (url: string) => {
   if(!isLoggedIn) {

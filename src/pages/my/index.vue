@@ -104,18 +104,7 @@ const handleVerify = () => {
 const handleLogClick = () => {
   if(isLoggedIn) logout()
   else {
-    uni.requestSubscribeMessage({
-      tmplIds: ['Gp5FiHAZ8ym599r7gRFP9Pb6mk8oZz8cQWi3i8CfmI0'],
-      success: (res: any) => {
-        if (res['Gp5FiHAZ8ym599r7gRFP9Pb6mk8oZz8cQWi3i8CfmI0'] === 'accept') {
-          message({title: '订阅成功'})
-        }
-        login()
-      },
-      fail: () => {
-        login()
-      }
-    })
+    login()
   }
 }
 

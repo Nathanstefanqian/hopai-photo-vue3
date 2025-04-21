@@ -107,7 +107,7 @@ const handleUpload = () => {
       const tempFilePaths:any = res.tempFilePaths;
       loading.value = true;
       progressShow.value = true
-      const { uploadFile, getConfig } = useUpload(0)
+      const { uploadFile, getConfig } = useUpload(1)
       try {
         progressList.value = tempFilePaths.map(() => 0)
         await Promise.all(

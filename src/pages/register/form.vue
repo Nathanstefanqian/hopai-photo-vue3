@@ -156,10 +156,17 @@ if (validationResult.isValid) {
       icon: 'success'
     })
     clearUser() // 给你退出
-    setTimeout(() => {
-      uni.reLaunch({
-      url: '/pages/register/pending'
-    }) }, 2000)
+    uni.requestSubscribeMessage({
+      tmplIds: ['EDojU3GyJal_FJnxw0uHvdq7jjUtUjQL7zGA48Y6mAU'],
+      success: (res) => {
+        message({ title: '订阅成功' })
+        setTimeout(() => {
+          uni.reLaunch({
+          url: '/pages/register/pending'
+        }) }, 1000)
+      },
+    })
+
 } else {
   uni.showToast({
     title: validationResult.errorMessage,

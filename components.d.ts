@@ -14,6 +14,8 @@ declare module 'vue' {
     Calendar: typeof import('./src/components/my/edit/Calendar.vue')['default']
     Container: typeof import('./src/components/home/Container.vue')['default']
     CreateAlbum: typeof import('./src/components/my/CreateAlbum.vue')['default']
+    Customer: typeof import('./src/components/my/edit/Customer.vue')['default']
+    CustomerDetail: typeof import('./src/components/my/edit/CustomerDetail.vue')['default']
     Device: typeof import('./src/components/my/edit/Device.vue')['default']
     EditAlbum: typeof import('./src/components/my/EditAlbum.vue')['default']
     Header: typeof import('./src/components/home/Header.vue')['default']

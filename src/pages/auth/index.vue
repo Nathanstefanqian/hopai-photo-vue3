@@ -92,8 +92,21 @@ const getUserPhoneNumber = async (e: any) => {
     })
   }
   else { // 正常登录
+    uni.requestSubscribeMessage({
+      tmplIds: ['2qFizoAlTUgtjf6MN9OVPJlse-yYsWmYb0XbhxN9BiE', 'djI0LaOysV8Rd5hmhtCi2kC28c6jUXjb9pZnQMXi1lk', 'gQUBQP0wwgGLlDbbxgZG1KrDDNab72fpkfWBZt8LFew'],
+      success: (res: any) => {
+        // 用户允许订阅消息
+        if (res['2qFizoAlTUgtjf6MN9OVPJlse-yYsWmYb0XbhxN9BiE'] === 'accept' ||
+            res['djI0LaOysV8Rd5hmhtCi2kC28c6jUXjb9pZnQMXi1lk'] === 'accept' ||
+            res['gQUBQP0wwgGLlDbbxgZG1KrDDNab72fpkfWBZt8LFew'] === 'accept') {
+          message({title: '订阅消息成功'})
+        }
+      }
+    })
     uni.reLaunch({ url: '/pages/home/index' })
-    message({title: '授权成功' })
+    setTimeout(() => {
+      message({title: '授权成功' })
+    }, 1000);
   }
 
 }

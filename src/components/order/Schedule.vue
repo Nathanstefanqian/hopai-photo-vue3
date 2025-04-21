@@ -11,7 +11,7 @@
       <div class="flex schedule-main-wrap" v-if="order.length">
         <div class="line"></div>
         <div class="schedule-main-item" v-for="item, index in order" :key="index">
-          <div class="time">
+          <div class="time" v-if="index === 0 || item.appointmentStartTime !== order[index-1].appointmentStartTime">
             <div class="time-start">{{ formatTime(item.appointmentStartTime) }}</div>
             <div class="time-divider"></div>
             <div class="time-end">{{ formatTime(item.appointmentEndTime) }}</div>
@@ -58,7 +58,7 @@ const getDayOrderData = async () => {
   const time = dayjs(props.chooseDate).valueOf()
   const res = (await getUserOrdersTimeLine({ date: [time] }))
   if(res.data[0]) {
-    order.value = res.data[0].orders
+    order.value = res.data[0].orders.sort((a, b) => a.appointmentStartTime - b.appointmentStartTime)
   }
   else {
     order.value = []

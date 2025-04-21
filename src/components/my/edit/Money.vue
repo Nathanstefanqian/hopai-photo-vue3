@@ -125,9 +125,18 @@ const handleSubmit = async () => {
     message({ title: res.msg })
     return
   }
-  message({ 'title': '提交成功' })
-  loading.value = false
-  await getData()
+  uni.requestSubscribeMessage({
+    tmplIds: ['j_ixhKB2cCnQ4RH6Y7d0rYFFdKmeXs9443fwHimFPWw'],
+    success: async (res) => {
+      message({ title: '订阅成功' })
+      setTimeout(async () => {
+        message({ 'title': '提交成功' })
+        loading.value = false
+        await getData()
+      }, 1000)
+    }
+  })
+
   })
 
 }
@@ -141,7 +150,7 @@ const handleUpload = (type: any) => {
     success: async (res: any) => {
       const tempFilePaths = res.tempFilePaths;
       loading.value = true;
-      const { uploadFile, getConfig } = useUpload(0)
+      const { uploadFile, getConfig } = useUpload(1)
       let flag = true
       try {
         await Promise.all(
