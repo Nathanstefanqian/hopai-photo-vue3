@@ -30,7 +30,7 @@
         </div>
         <div class="card-info-item">
           <div class="card-info-item-title">客户：</div>
-          <div class="card-info-item-content" @click="handleCopy(item.memberPhone, item.id)">{{ item.memberName }}  {{ maskPhone(item.memberPhone) }} <span class="copy">拨打电话</span></div>
+          <div class="card-info-item-content" @click="handleCopy(item.memberPhone, item.id)">{{ item.memberName }}  {{ item.memberPhone }} <span class="copy">拨打电话</span></div>
         </div>
         <div class="card-info-item">
           <div class="card-info-item-title">地点：</div>
@@ -85,7 +85,7 @@ const handleCopy = async (number: any, id: any) => {
   try {
     const { data } = await getTmpPhone(id)
     uni.makePhoneCall({
-      phoneNumber: data,
+      phoneNumber: number,
       fail: () => {
         message({ title: '拨打电话失败' })
       }

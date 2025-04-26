@@ -40,7 +40,7 @@ const fetchWeekData = async () => {
     res.map(item => {
       total.value += item.orders.length
       item.orders.map(order => {
-        if(order.orderStatus == 1) {
+        if(order.orderStatus == 1 && dayjs(order.appointmentStartTime).isAfter(dayjs())) {
           pendingTotal.value += 1
         }
       })
