@@ -27,10 +27,10 @@
               <div class="guide-main-left">
                 <div class="guide-main-left-top">
                   <div class="dot"></div>
-                  <span class="title">请尽快上传资料认证摄影师</span>
+                  <span class="title">请尽快上传认证资料</span>
                 </div>
                 <div class="guide-main-left-bottom">
-                  <span class="title">{{ msg || '认证摄影师即可享受系统推单' }}</span>
+                  <span class="title">{{ msg || '认证完成后即可享受系统推单' }}</span>
                 </div>
               </div>
               <div class="guide-main-right">
@@ -142,6 +142,19 @@ const getData = async () => {
   }
   const res = await getUserInfo()
   user.value = res.data
+  if(user.value.status) {
+    modal({
+      title: '您已被管理员禁用',
+      content: '请联系客服',
+      showCancelButton: true,
+      confirmText: '退出登录',
+      cancelText: '联系客服'
+    }).then(() => {
+      logout(true)
+    }).catch(() => {
+      uni.navigateTo({ url: '/components/my/edit/Customer' })
+    })
+  }
   hasVerify.value = false
   if(!user.value.bizList.length || !user.value.areaIds.length || user.value.bankName=='Unknown Bank' ) {
     return
@@ -280,6 +293,7 @@ onShow(async () => {
           &-main {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             &-left {
               display: flex;
               flex-direction: column;
@@ -307,7 +321,6 @@ onShow(async () => {
               }
             }
             &-right {
-              margin-left: 102rpx;
               .btn {
                 display: flex;
                 align-items: center;
@@ -357,6 +370,7 @@ onShow(async () => {
       padding: 80rpx 0;
       display: flex;
       font-weight: 400 !important;
+      font-size: 36rpx;
       color: rgba(0, 0, 0, 0.55);
       justify-content: center;
     }

@@ -32,7 +32,7 @@ import { useUserStore } from '@/pinia/user'
 // import { useSts } from '@/hooks/useSts'
 import { useUpload } from '@/hooks/useUpload'
 // const { getStsToken, signatrueUrl } = useSts()
-const { getConfig, uploadFile   } = useUpload(0)
+const { getConfig, uploadFile   } = useUpload(1)
 const userId = useUserStore().getUserInfo?.userId
 const device = ref<DeviceVO[]>([])
 const loading = ref(false)

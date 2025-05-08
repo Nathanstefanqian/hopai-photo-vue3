@@ -16,6 +16,7 @@
             </div>
           </div>
         </up-skeleton>
+        <div class="order-main-area-tip">—— 请选择可免交通费接单区域，可选多个区域 ——</div>
       </div>
       <div class="order-main-type">
         <div class="order-main-type-header">
@@ -139,7 +140,12 @@ onMounted(async () => {
     width: 100%;
 
     &-area {
-
+      &-tip {
+        text-align: center;
+        color: rgba(40, 40, 40, 0.5);
+        font-size: 24rpx;
+        margin-bottom: 20rpx;
+      }
       &-header {
         display: flex;
         justify-content: space-between;

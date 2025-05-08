@@ -36,9 +36,12 @@
           <div class="card-info-item-title">地点：</div>
           <div class="card-info-item-content">{{ item.location }}</div>
         </div>
-        <div class="card-info-item">
+        <div class="card-info-item ">
           <div class="card-info-item-title">备注：</div>
-          <div class="card-info-item-content">{{ item.remark }}</div>
+          <div class="card-info-item-content card-info-item-content-flex">
+            <span class="remark-line" >{{ item.remark.split(' ').slice(0, 2).join(' ') }}</span>
+            <span class="remark-line">{{ item.remark.split(' ').slice(2).join(' ') }}</span>
+          </div>
         </div>
       </div>
       <div class="mb-[40rpx]"></div>
@@ -85,9 +88,8 @@ const handleCopy = async (number: any, id: any) => {
   try {
     const { data } = await getTmpPhone(id)
     uni.makePhoneCall({
-      phoneNumber: number,
+      phoneNumber: data,
       fail: () => {
-        message({ title: '拨打电话失败' })
       }
     })
   } catch (error) {
@@ -103,6 +105,17 @@ const handleBtn = async (id: any, status: any) => {
       emit('update:active', props.active + 1)
       await getData(activeStatus[props.active])
       message({ title: '确认成功'})
+      uni.requestSubscribeMessage({
+      tmplIds: ['2qFizoAlTUgtjf6MN9OVPJlse-yYsWmYb0XbhxN9BiE', 'djI0LaOysV8Rd5hmhtCi2kC28c6jUXjb9pZnQMXi1lk', 'gQUBQP0wwgGLlDbbxgZG1KrDDNab72fpkfWBZt8LFew'],
+      success: (res: any) => {
+        // 用户允许订阅消息
+        if (res['2qFizoAlTUgtjf6MN9OVPJlse-yYsWmYb0XbhxN9BiE'] === 'accept' ||
+            res['djI0LaOysV8Rd5hmhtCi2kC28c6jUXjb9pZnQMXi1lk'] === 'accept' ||
+            res['gQUBQP0wwgGLlDbbxgZG1KrDDNab72fpkfWBZt8LFew'] === 'accept') {
+          message({title: '订阅消息成功'})
+        }
+      }
+    })
   })
   } else if(status == 3) {
         modal({ 
@@ -286,12 +299,23 @@ const handleCopyId = (id: any) => {
       display: flex;
       color: rgba(40, 40, 40, 0.50);
       font-size: 28rpx !important;
+
+
       &-title {
         width: 120rpx;
         margin-bottom: 8rpx;
         font-size: 28rpx !important;
       }
       &-content {
+        &-flex {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start !important;
+        }
+        .remark-line {
+          font-size: 28rpx !important;
+          color: rgba(40, 40, 40, 0.50);
+        }
         display: flex;
         align-items: center;
         flex: 1;
@@ -333,5 +357,9 @@ const handleCopyId = (id: any) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.remark-line {
+  display: block;
+  line-height: 1.5;
 }
 </style>

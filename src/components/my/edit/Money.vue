@@ -129,13 +129,13 @@ const handleSubmit = async () => {
     tmplIds: ['j_ixhKB2cCnQ4RH6Y7d0rYFFdKmeXs9443fwHimFPWw'],
     success: async (res) => {
       message({ title: '订阅成功' })
-      setTimeout(async () => {
-        message({ 'title': '提交成功' })
-        loading.value = false
-        await getData()
-      }, 1000)
     }
   })
+  setTimeout(async () => {
+    message({ 'title': '提交成功' })
+    loading.value = false
+    await getData()
+  }, 1000)
 
   })
 

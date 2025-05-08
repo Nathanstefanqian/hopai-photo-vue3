@@ -163,9 +163,9 @@ const handleEnter = async () => {
   }
   // 更新数据并保存到 localStorage
   await registrationStore.updateFormData({
-  orderType: formData.value.orderType,
-  area: formData.value.area,
-  agreement: formData.value.agreement
+    orderType: formData.value.orderType,
+    area: formData.value.area,
+    agreement: formData.value.agreement
   })
 
 

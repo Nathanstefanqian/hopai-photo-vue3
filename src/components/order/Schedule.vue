@@ -59,11 +59,10 @@ const order = ref<orderVO[]>([])
 
 const handleCall = async (number: string, id: number) => {
   try {
-    // const { data } = await getTmpPhone(id)
+    const { data } = await getTmpPhone(id)
     uni.makePhoneCall({
-      phoneNumber: number,
+      phoneNumber: data,
       fail: () => {
-        message({ title: '拨打电话失败' })
       }
     })
   } catch (error) {
