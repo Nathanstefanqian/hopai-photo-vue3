@@ -27,7 +27,13 @@
               </div>
               <div class="money-main-personal-main-item">
                   <div class="title">开户行总行编码</div>
-                  <input class="desc" v-model="formData.bankCode" />
+                  <div class="desc" @click="showBankPicker = true">{{ getBankName(formData.bankCode) }}</div>
+                  <up-picker
+                    :show="showBankPicker"
+                    :columns="[bankList]"
+                    @confirm="handleBankConfirm"
+                    @cancel="showBankPicker = false"
+                  />
               </div>
               <div class="money-main-personal-main-item">
                   <div class="title">银行卡号</div>
@@ -75,6 +81,8 @@ const loading = ref(false)
 const bank = ref()
 const user = ref<UserVO>()
 const registerStatus = ref(3)
+const showBankPicker = ref(false)
+const bankList = ref<{text: string, value: string}[]>([])
 const formData = ref({
   userId: userInfo?.userId,
   idCardName: "上传证件自动填写",
@@ -216,7 +224,12 @@ const getData = async () => {
   const res = (await AuthApi.getUserInfo()).data
   registerStatus.value = res.registerStatus
   user.value = (await getUserInfo()).data || ''
-  bank.value = (await getListBankCode()).data
+  const bankData = (await getListBankCode()).data
+bank.value = bankData
+bankList.value = bankData.map((item: any) => ({
+  text: item.name,
+  value: item.code
+}))
   if(registerStatus.value !== 3) { // 初始化信息
     const data = user.value.appPhotographerOpenSubAppReqVO
     formData.value.bankCardNumber = data.bankCardNumber;
@@ -233,6 +246,18 @@ const getData = async () => {
   }
   loading.value = false
 }
+const getBankName = (code: string) => {
+  if (!code || !bank.value) return '请选择银行'
+  const bankItem = bank.value.find((item: any) => item.code === code)
+  return bankItem ? bankItem.name : '请选择银行'
+}
+
+const handleBankConfirm = (e: any) => {
+  const [{ value }] = e.value
+  formData.value.bankCode = value
+  showBankPicker.value = false
+}
+
 onMounted(async () => {
   await getData()
 })

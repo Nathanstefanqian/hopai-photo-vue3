@@ -1,7 +1,7 @@
 {
   "appid": "wx3270c28574f02992",
   "compileType": "miniprogram",
-  "libVersion": "3.7.7",
+  "libVersion": "trial",
   "packOptions": {
     "ignore": [],
     "include": []
@@ -22,7 +22,7 @@
   },
   "condition": {},
   "editorSetting": {
-    "tabIndent": "insertSpaces",
+    "tabIndent": "auto",
     "tabSize": 2
   }
 }

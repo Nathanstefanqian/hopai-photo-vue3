@@ -23,8 +23,6 @@ declare module 'vue' {
     Money: typeof import('./src/components/my/edit/Money.vue')['default']
     Order: typeof import('./src/components/my/edit/Order.vue')['default']
     Photo: typeof import('./src/components/my/edit/Photo.vue')['default']
-    RouterLink: typeof import('vue-router')['RouterLink']
-    RouterView: typeof import('vue-router')['RouterView']
     Schedule: typeof import('./src/components/order/Schedule.vue')['default']
     Tab: typeof import('./src/components/home/Tab.vue')['default']
     Webview: typeof import('./src/components/webview/index.vue')['default']

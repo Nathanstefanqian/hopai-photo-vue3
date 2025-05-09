@@ -11,3 +11,9 @@ export const getUserOrdersTimeLine = async (data: any) => {
 export const getTmpPhone = async (id: number) => {
   return await request.get(`/member/order/getTmpPhone?id=${id}`)
 }
+
+export const getBankCode = async () => {
+  return await request.get('/pay/bankcode/getList')
+}
+
+
