@@ -9,6 +9,15 @@
           <input v-model="formData.nickname" class="form-input" placeholder="请输入姓名" />
         </div>
         <div class="form-item-content-input">
+          <span class="title">性别</span>
+          <div class="flex items-center">
+            <up-radio-group v-model="formData.sex">
+              <up-radio activeColor="#ba2636" :name="1" label="男" class="mr-[32rpx]" :customStyle="{ marginRight: '32rpx' }"></up-radio>
+              <up-radio activeColor="#ba2636" :name="0" label="女"></up-radio>
+            </up-radio-group>
+          </div>
+        </div>
+        <div class="form-item-content-input">
           <span class="title">电话</span>
           <input v-model="formData.mobile" class="form-input" placeholder="请输入电话" />
         </div>
@@ -96,7 +105,8 @@ const formData = ref({
   fixedFocalLengthLens: '',
   littleRedBookId: '',
   douYinId: '',
-  photoList: []
+  photoList: [],
+  sex: 1
 })
 
 const handleDeviceUpdate = (device: any) => {
@@ -131,6 +141,7 @@ if (validationResult.isValid) {
     phone: formData.value.mobile, // 从 formData 中提取手机号码
     areaId: temp.area.areaId, // 保持地区信息不变
     nickname: formData.value.nickname, // 从 formData 中提取昵称
+    sex: formData.value.sex,
     appPhotographerInfoRegisterVO: {
     littleRedBookId: formData.value.littleRedBookId, // 从 formData 中提取小红书ID
     douYinId: formData.value.douYinId, // 从 formData 中提取抖音ID
@@ -160,12 +171,13 @@ if (validationResult.isValid) {
       tmplIds: ['EDojU3GyJal_FJnxw0uHvdq7jjUtUjQL7zGA48Y6mAU'],
       success: (res) => {
         message({ title: '订阅成功' })
-        setTimeout(() => {
-          uni.reLaunch({
-          url: '/pages/register/pending'
-        }) }, 1000)
       },
     })
+    setTimeout(() => {
+      uni.reLaunch({
+      url: '/pages/register/pending'
+    }) }, 1000)
+    
 
 } else {
   uni.showToast({
@@ -183,6 +195,7 @@ const validateFormData = (data: any) => {
 
   // 检查每个字段是否为空
   if (!data.nickname) errors.push('姓名');
+  // if (!data.sex) errors.push('性别');
   if (!data.mobile) errors.push('电话');
   if (!data.wechatId) errors.push('微信号');
   if (!data.camera) errors.push('相机');

@@ -92,6 +92,7 @@ const getUserPhoneNumber = async (e: any) => {
     })
   }
   else { // 正常登录
+    console.log('正常登录申请模版')
     uni.requestSubscribeMessage({
       tmplIds: ['2qFizoAlTUgtjf6MN9OVPJlse-yYsWmYb0XbhxN9BiE', 'djI0LaOysV8Rd5hmhtCi2kC28c6jUXjb9pZnQMXi1lk', 'gQUBQP0wwgGLlDbbxgZG1KrDDNab72fpkfWBZt8LFew'],
       success: (res: any) => {

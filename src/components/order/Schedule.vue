@@ -16,6 +16,7 @@
             <div class="time-divider"></div>
             <div class="time-end">{{ formatTime(item.appointmentEndTime) }}</div>
           </div>
+          <div class="time-blank" v-else></div>
           <div class="order">
             <div class="order-title">
               <span>{{ item.spuDescribe }}</span>
@@ -28,7 +29,7 @@
             </div>
             <div class="order-people">
               <image class="order-people-img" :src="item.memberAvatar ? item.memberAvatar : netConfig.picURL + '@/static/my/avatar.jpg' " mode="aspectFill" />
-              <span class="order-people-desc">{{ item.memberName }} {{ maskPhone(item.memberPhone) }}</span>
+              <span class="order-people-desc" @click="handleCall(item.memberPhone, item.id)">{{ item.memberName }} {{ item.memberPhone }}<span class="call">拨打电话</span></span>
             </div>
           </div>
         </div>
@@ -42,18 +43,32 @@
 </template>
 
 <script setup lang="ts">
-import { getUserOrdersTimeLine } from '@/api/order/index'
+import { getUserOrdersTimeLine, getTmpPhone } from '@/api/order/index'
 import { netConfig } from '@/config/net.config'
 import { orderVO } from '@/api/order/types'
 import { formatTime, getStatus, maskPhone } from '@/utils/tools'
+import { useNotification } from '@/hooks/useNotification'
 import dayjs from 'dayjs';
 
+const { message } = useNotification()
 const props = defineProps<{
   chooseDate: string;
   loading: boolean;
 }>()
 const order = ref<orderVO[]>([])
 
+const handleCall = async (number: string, id: number) => {
+  try {
+    const { data } = await getTmpPhone(id)
+    uni.makePhoneCall({
+      phoneNumber: data,
+      fail: () => {
+      }
+    })
+  } catch (error) {
+    message({ title: '获取临时电话失败' })
+  }
+}
 const getDayOrderData = async () => {
   const time = dayjs(props.chooseDate).valueOf()
   const res = (await getUserOrdersTimeLine({ date: [time] }))
@@ -158,6 +173,9 @@ onMounted(async () => {
           margin: 8rpx 0;
         }
       }
+      .time-blank {
+        width: 144rpx;
+      }
 
       .order {
         flex: 1;
@@ -226,6 +244,12 @@ onMounted(async () => {
             flex: 1;
             font-size: 28rpx;
             color: rgba(0, 0, 0, 0.55);
+
+            .call {
+              color: #ba2636;
+              font-size: 24rpx;
+              margin-left: 20rpx;
+            }
           }
         }
 

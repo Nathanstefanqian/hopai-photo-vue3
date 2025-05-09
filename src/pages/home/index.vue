@@ -25,7 +25,13 @@
 <script setup lang="ts">
 import Container from '@/components/home/Container.vue'
 import Header from '@/components/home/Header.vue'
+import { useUserStore } from '@/pinia/user'
+import { useNotification } from '@/hooks/useNotification'
+
 import { activeStatus } from '@/utils/tools'
+import { getUserInfo, getAccountOpenFailureMsg } from '@/api/my/index'
+const { logout, isLoggedIn } = useUserStore()
+const { message, modal } = useNotification()
 
 const handleChange = (e: any) => {
   active.value = e.index
@@ -57,8 +63,21 @@ const container = ref()
 //   calculateBorderRadius()
 // })
 
-onShow(() => {
-
+onShow(async () => {
+  const res = await getUserInfo()
+  if(res.data?.status) {
+    modal({
+      title: '您已被管理员禁用',
+      content: '请联系客服',
+      showCancelButton: true,
+      confirmText: '退出登录',
+      cancelText: '联系客服'
+    }).then(() => {
+      logout(true)
+    }).catch(() => {
+      uni.navigateTo({ url: '/components/my/edit/Customer' })
+    })
+  }
 })
 
 onPullDownRefresh(async () => {

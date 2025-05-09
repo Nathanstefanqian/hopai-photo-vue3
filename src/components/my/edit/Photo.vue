@@ -30,7 +30,7 @@ import { useNotification } from '@/hooks/useNotification'
 import { DeviceVO } from '@/api/my/types'
 import { useUserStore } from '@/pinia/user'
 import { useUpload } from '@/hooks/useUpload'
-const { getConfig, uploadFile   } = useUpload(0)
+const { getConfig, uploadFile   } = useUpload(1)
 const userId = useUserStore().getUserInfo?.userId
 const device = ref<DeviceVO[]>([])
 const loading = ref(false)
@@ -53,7 +53,7 @@ const handleDelete = async (id: string) => {
     await deleteDevicePic(id)
     await getData()
     message({ title: '删除成功' })
-  }).catch(() => message({ title: '取消删除' }))
+  })
 
 
 }

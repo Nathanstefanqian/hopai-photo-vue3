@@ -40,7 +40,7 @@ const fetchWeekData = async () => {
     res.map(item => {
       total.value += item.orders.length
       item.orders.map(order => {
-        if(order.orderStatus == 1) {
+        if(order.orderStatus == 1 && dayjs(order.appointmentStartTime).isAfter(dayjs())) {
           pendingTotal.value += 1
         }
       })
@@ -58,10 +58,18 @@ const getData = async () => {
 const scan = async () => {
   uni.scanCode({
     success: async res => {
-      modal({ title: '确认扫码', content: '您正在扫码，请确认订单无误' }).then(async () => {
-        await scanQrCode({ code: res.result });
-        await getData();
+      modal({ title: '开始拍摄', content: '拍摄完成后，请及时上传底图' }).then(async () => {
+        try {
+          await scanQrCode({ code: res.result });
+          message({ title: '核劵成功' });
+          await getData();
+        } catch (error) {
+          message({ title: '扫码失败，请重试' });
+        }
       });
+    },
+    fail: () => {
+      message({ title: '扫码失败，请重试' });
     }
   });
 };

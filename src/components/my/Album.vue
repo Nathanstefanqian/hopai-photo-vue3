@@ -41,7 +41,7 @@ const getData = async () => {
   loading.value = true
   try {
     album.value= (await getAlbumPage({ pageNo:1 , pageSize: 50, userId })).data?.list || []
-    await Promise.all(album.value.map(async item => {
+    await Promise.all(album.value.map(async (item: any) => {
       item.picUrl = (await getPhoto(item.coverPhotoId)).data.url || ''
     }))
   } finally {
